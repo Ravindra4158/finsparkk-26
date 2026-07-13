@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="BankGuard Enterprise — Real-time AI-powered financial threat detection, loan monitoring, and SWIFT transaction surveillance dashboard.">
+  <meta name="keywords" content="BankGuard, Enterprise, Financial Security, Threat Detection, Loan Monitoring, SWIFT, Risk Management, Fraud Detection">
+  <meta name="author" content="BankGuard Enterprise">
+  <meta name="robots" content="index, follow">
+  <meta property="og:title" content="BankGuard Enterprise Dashboard">
+  <meta property="og:description" content="Real-time AI-powered financial threat detection and risk management platform.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#060D1A">
+  <title>BankGuard Enterprise — Dashboard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- SIDEBAR NAVIGATION                                  -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <aside id="sidebar" class="sidebar">
+    <div class="sidebar__brand">
+      <div class="sidebar__logo" id="sidebarLogo">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none">
+          <rect x="2" y="2" width="28" height="28" rx="6" stroke="#00FFB2" stroke-width="2"/>
+          <path d="M10 22V14L16 10L22 14V22" stroke="#00FFB2" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M14 22V18H18V22" stroke="#00C8F8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <span class="sidebar__title">BANKGUARD</span>
+    </div>
+
+    <nav class="sidebar__nav" id="sidebarNav">
+      <a href="#" class="sidebar__link sidebar__link--active" id="navDashboard" data-page="dashboard" data-roles="manager,employee" data-tooltip="Dashboard">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/>
+          <rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/>
+        </svg>
+        <span class="sidebar__label">Dashboard</span>
+      </a>
+      <a href="#" class="sidebar__link" id="navAlerts" data-page="alerts" data-roles="manager" data-tooltip="Alerts">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+        <span class="sidebar__label">Alerts</span>
+        <span class="sidebar__badge" id="alertBadge">5</span>
+      </a>
+      <a href="#" class="sidebar__link" id="navLoans" data-page="loans" data-roles="manager,employee" data-tooltip="Loans">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+        </svg>
+        <span class="sidebar__label">Loans</span>
+      </a>
+      <a href="#" class="sidebar__link" id="navEmployees" data-page="employees" data-roles="manager" data-tooltip="Employee Behavior">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 12h-4"/><path d="M20 10v4"/>
+        </svg>
+        <span class="sidebar__label">Employee Behavior</span>
+      </a>
+      <a href="#" class="sidebar__link" id="navCustomers" data-page="customers" data-roles="manager,employee" data-tooltip="Branch Customers">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 21h18"/><path d="M5 21V7l7-4 7 4v14"/><path d="M9 21v-6h6v6"/><path d="M9 10h.01"/><path d="M15 10h.01"/>
+        </svg>
+        <span class="sidebar__label">Branch Customers</span>
+      </a>
+      <a href="#" class="sidebar__link" id="navGraph" data-page="graph" data-roles="manager" data-tooltip="Graph">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+        </svg>
+        <span class="sidebar__label">Graph</span>
+      </a>
+      <a href="#" class="sidebar__link" id="navSwift" data-page="swift" data-roles="manager" data-tooltip="SWIFT Monitor">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/>
+          <path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/>
+        </svg>
+        <span class="sidebar__label">SWIFT Monitor</span>
+      </a>
+      <a href="#" class="sidebar__link" id="navReports" data-page="reports" data-roles="manager" data-tooltip="Reports">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/>
+          <line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/>
+        </svg>
+        <span class="sidebar__label">Reports</span>
+      </a>
+    </nav>
+
+    <div class="sidebar__footer">
+      <a href="../docs/system-architecture-diagrams.html" class="sidebar__link sidebar__link--arch" id="navArchitecture" data-tooltip="Architecture">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+        </svg>
+        <span class="sidebar__label">View System Architecture</span>
+      </a>
+      <button id="themeToggle" class="sidebar__toggle" aria-label="Toggle theme">
+        <svg class="sidebar__icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+        <span class="sidebar__label">Toggle Theme</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- MAIN CONTENT                                        -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <main class="main" id="mainContent">
+
+    <!-- HEADER -->
+    <header class="header" id="header">
+      <div class="header__left">
+        <button class="header__menu-btn" id="menuToggle" aria-label="Toggle sidebar">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/>
+          </svg>
+        </button>
+        <h1 class="header__title">
+          <span class="header__title-accent">BANKGUARD</span>
+          <span class="header__title-sub">ENTERPRISE</span>
+        </h1>
+      </div>
+      <div class="header__right">
+        <div class="header__search" id="searchContainer">
+          <svg class="header__search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+          </svg>
+          <input type="text" id="searchInput" class="header__search-input" placeholder="Search employee, customer, alert..." autocomplete="off">
+        </div>
+        <div class="header__status" id="connectionStatus">
+          <span class="header__dot header__dot--live"></span>
+          <span class="header__status-text">LIVE</span>
+        </div>
+        <label class="header__role" for="roleSelect">
+          <span>Role</span>
+          <select id="roleSelect" class="header__role-select">
+            <option value="manager">Manager</option>
+            <option value="employee">Employee</option>
+          </select>
+        </label>
+        <div class="header__avatar" id="userAvatar" aria-label="User profile">
+          <span id="userInitials">BM</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: DASHBOARD                                     -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page page--active" id="page-dashboard">
+      <div class="page__inner">
+        <!-- STAT CARDS -->
+        <div class="stats" id="statsGrid">
+          <div class="stat-card stat-card--cyan" id="statTotalAlerts">
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" data-target="1284">0</span>
+              <span class="stat-card__label">Employee Events Today</span>
+            </div>
+            <div class="stat-card__trend stat-card__trend--up">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              <span>+12.5%</span>
+            </div>
+          </div>
+          <div class="stat-card stat-card--red" id="statActiveThreats">
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" data-target="23">0</span>
+              <span class="stat-card__label">Anomalous Logins</span>
+            </div>
+            <div class="stat-card__trend stat-card__trend--down">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 18 13.5 8.5 8.5 13.5 1 6"/><polyline points="17 18 23 18 23 12"/></svg>
+              <span>-4.2%</span>
+            </div>
+          </div>
+          <div class="stat-card stat-card--green" id="statLoansMonitored">
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" data-target="8492">0</span>
+              <span class="stat-card__label">Branch Customers</span>
+            </div>
+            <div class="stat-card__trend stat-card__trend--up">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+              <span>+8.1%</span>
+            </div>
+          </div>
+          <div class="stat-card stat-card--purple" id="statRiskScore">
+            <div class="stat-card__icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="stat-card__body">
+              <span class="stat-card__value" data-target="67">0</span>
+              <span class="stat-card__label">Bank Safety Score</span>
+            </div>
+            <div class="stat-card__trend stat-card__trend--neutral">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+              <span>Stable</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- CONTENT GRID -->
+        <div class="content-grid" id="contentGrid">
+          <!-- RECENT ALERTS TABLE -->
+          <div class="card card--table" id="alertsCard">
+            <div class="card__header">
+              <h2 class="card__title">
+                <svg class="card__title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/></svg>
+                Bank Safety Signals
+              </h2>
+              <div class="card__actions">
+                <select id="alertFilterDash" class="card__filter" aria-label="Filter alerts">
+                  <option value="all">All Levels</option>
+                  <option value="critical">Critical</option>
+                  <option value="high">High</option>
+                  <option value="medium">Medium</option>
+                  <option value="low">Low</option>
+                </select>
+              </div>
+            </div>
+            <div class="card__body">
+              <div class="table-wrap">
+                <table class="table" id="alertsTable">
+                  <thead><tr><th>ID</th><th>Employee / Customer</th><th>Signal</th><th>Risk Score</th><th>Threat Level</th><th>Timestamp</th></tr></thead>
+                  <tbody id="alertsTableBody"></tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- RISK DISTRIBUTION CHART -->
+          <div class="card card--chart" id="riskChartCard">
+            <div class="card__header">
+              <h2 class="card__title">
+                <svg class="card__title-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><polyline points="9 17 9 11"/><polyline points="13 17 13 7"/><polyline points="17 17 17 13"/></svg>
+                Risk Distribution
+              </h2>
+            </div>
+            <div class="card__body card__body--chart">
+              <canvas id="riskChart" width="400" height="280"></canvas>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: ALERTS                                        -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page" id="page-alerts">
+      <div class="page__inner">
+        <div class="page__header">
+          <h2 class="page__title">Alert Management</h2>
+          <p class="page__subtitle">Real-time threat alerts across all detection modules</p>
+        </div>
+        <div class="stats stats--3">
+          <div class="stat-card stat-card--red"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="7">0</span><span class="stat-card__label">Critical Alerts</span></div></div>
+          <div class="stat-card stat-card--amber"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="16">0</span><span class="stat-card__label">High Priority</span></div></div>
+          <div class="stat-card stat-card--green"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="142">0</span><span class="stat-card__label">Resolved Today</span></div></div>
+        </div>
+        <div class="card">
+          <div class="card__header">
+            <h2 class="card__title">All Alerts</h2>
+            <select id="alertFilterPage" class="card__filter"><option value="all">All Levels</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select>
+          </div>
+          <div class="card__body"><div class="table-wrap">
+            <table class="table"><thead><tr><th>ID</th><th>Entity</th><th>Module</th><th>Risk Score</th><th>Threat Level</th><th>Timestamp</th><th>Action</th></tr></thead>
+            <tbody id="alertsFullBody"></tbody></table>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: LOANS                                         -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page" id="page-loans">
+      <div class="page__inner">
+        <div class="page__header">
+          <h2 class="page__title">Loan Monitoring</h2>
+          <p class="page__subtitle">XGBoost + SHAP-powered loan fraud probability analysis</p>
+        </div>
+        <div class="stats stats--4">
+          <div class="stat-card stat-card--green"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="6842">0</span><span class="stat-card__label">Approved</span></div></div>
+          <div class="stat-card stat-card--amber"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="1208">0</span><span class="stat-card__label">Pending Review</span></div></div>
+          <div class="stat-card stat-card--red"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="38">0</span><span class="stat-card__label">Held / Flagged</span></div></div>
+          <div class="stat-card stat-card--purple"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="404">0</span><span class="stat-card__label">High Risk (>70)</span></div></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2 class="card__title">Loan Applications Queue</h2></div>
+          <div class="card__body"><div class="table-wrap">
+            <table class="table"><thead><tr><th>Loan ID</th><th>Applicant</th><th>Amount (₹)</th><th>Officer</th><th>Risk Score</th><th>Status</th><th>SHAP</th></tr></thead>
+            <tbody id="loansBody"></tbody></table>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: GRAPH                                         -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page" id="page-graph">
+      <div class="page__inner">
+        <div class="page__header">
+          <h2 class="page__title">Relationship Graph</h2>
+          <p class="page__subtitle">Neo4j + Louvain community detection — Collusion cluster analysis</p>
+        </div>
+        <div class="stats stats--3">
+          <div class="stat-card stat-card--orange"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="18" r="3"/><line x1="6" y1="9" x2="6" y2="15"/><line x1="8.59" y1="16.41" x2="15.42" y2="19.59"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="12">0</span><span class="stat-card__label">Suspicious Clusters</span></div></div>
+          <div class="stat-card stat-card--cyan"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="847">0</span><span class="stat-card__label">Nodes Analyzed</span></div></div>
+          <div class="stat-card stat-card--purple"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M16 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="8.5" cy="7" r="4"/><line x1="20" y1="8" x2="20" y2="14"/><line x1="23" y1="11" x2="17" y2="11"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="3">0</span><span class="stat-card__label">Hub Entities</span></div></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2 class="card__title">Network Visualization</h2></div>
+          <div class="card__body card__body--chart" style="min-height:400px;">
+            <canvas id="graphCanvas" width="800" height="400"></canvas>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: SWIFT MONITOR                                 -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page" id="page-swift">
+      <div class="page__inner">
+        <div class="page__header">
+          <h2 class="page__title">SWIFT / CBS Monitor</h2>
+          <p class="page__subtitle">Real-time SWIFT message reconciliation with Core Banking System</p>
+        </div>
+        <div class="stats stats--4">
+          <div class="stat-card stat-card--amber"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="3847">0</span><span class="stat-card__label">SWIFT Messages</span></div></div>
+          <div class="stat-card stat-card--green"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="3839">0</span><span class="stat-card__label">CBS Matched</span></div></div>
+          <div class="stat-card stat-card--red"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="8">0</span><span class="stat-card__label">Reconciliation Gaps</span></div></div>
+          <div class="stat-card stat-card--cyan"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="99.8">0</span><span class="stat-card__label">Match Rate %</span></div></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2 class="card__title">SWIFT Reconciliation Log</h2></div>
+          <div class="card__body"><div class="table-wrap">
+            <table class="table"><thead><tr><th>SWIFT ID</th><th>Type</th><th>Sender</th><th>Amount (₹)</th><th>Beneficiary</th><th>CBS Match</th><th>Risk Flag</th></tr></thead>
+            <tbody id="swiftBody"></tbody></table>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: EMPLOYEE BEHAVIOR                             -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page" id="page-employees">
+      <div class="page__inner">
+        <div class="page__header">
+          <h2 class="page__title">Employee Login & Behavior Monitor</h2>
+          <p class="page__subtitle">Security view across branch logins, device fingerprints, IP changes, transaction velocity, and privileged actions</p>
+        </div>
+        <div class="stats stats--4">
+          <div class="stat-card stat-card--cyan"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/><polyline points="10 17 15 12 10 7"/><line x1="15" y1="12" x2="3" y2="12"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="1248">0</span><span class="stat-card__label">Login Events</span></div></div>
+          <div class="stat-card stat-card--red"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="11">0</span><span class="stat-card__label">High Risk Staff</span></div></div>
+          <div class="stat-card stat-card--amber"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="37">0</span><span class="stat-card__label">Off-hour Sessions</span></div></div>
+          <div class="stat-card stat-card--green"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="98">0</span><span class="stat-card__label">MFA Pass Rate %</span></div></div>
+        </div>
+        <div class="content-grid">
+          <div class="card">
+            <div class="card__header"><h2 class="card__title">Employee Session Risk</h2><select id="employeeBranchFilter" class="card__filter"><option value="all">All Branches</option><option value="mumbai">Mumbai Fort</option><option value="delhi">Delhi CP</option><option value="pune">Pune Camp</option></select></div>
+            <div class="card__body"><div class="table-wrap">
+              <table class="table"><thead><tr><th>Employee</th><th>Branch</th><th>Role</th><th>Last Login</th><th>Device / IP</th><th>Risk</th><th>Behavior Signal</th></tr></thead>
+              <tbody id="employeesBody"></tbody></table>
+            </div></div>
+          </div>
+          <div class="card">
+            <div class="card__header"><h2 class="card__title">Behavior Signals</h2></div>
+            <div class="card__body">
+              <div class="signal-list" id="behaviorSignals"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: BRANCH CUSTOMERS                              -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page" id="page-customers">
+      <div class="page__inner">
+        <div class="page__header">
+          <h2 class="page__title">Branch Customer Data</h2>
+          <p class="page__subtitle">Branch employee view of customer profiles, KYC status, loans, deposits, relationship manager, and account risk</p>
+        </div>
+        <div class="stats stats--4">
+          <div class="stat-card stat-card--cyan"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="8492">0</span><span class="stat-card__label">Customers Visible</span></div></div>
+          <div class="stat-card stat-card--green"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="8120">0</span><span class="stat-card__label">KYC Complete</span></div></div>
+          <div class="stat-card stat-card--amber"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 8v8"/><path d="M8 12h8"/><circle cx="12" cy="12" r="10"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="218">0</span><span class="stat-card__label">KYC Review</span></div></div>
+          <div class="stat-card stat-card--red"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="42">0</span><span class="stat-card__label">High Risk Accounts</span></div></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2 class="card__title">Branch Customer Portfolio</h2><select id="customerFilter" class="card__filter"><option value="all">All Risk Levels</option><option value="critical">Critical</option><option value="high">High</option><option value="medium">Medium</option><option value="low">Low</option></select></div>
+          <div class="card__body"><div class="table-wrap">
+            <table class="table"><thead><tr><th>Customer</th><th>Branch</th><th>Customer ID</th><th>KYC</th><th>Loans</th><th>Deposits</th><th>RM</th><th>Risk</th><th>Action</th></tr></thead>
+            <tbody id="customersBody"></tbody></table>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════════════════════════════════════════ -->
+    <!-- PAGE: REPORTS                                       -->
+    <!-- ═══════════════════════════════════════════════════ -->
+    <section class="page" id="page-reports">
+      <div class="page__inner">
+        <div class="page__header">
+          <h2 class="page__title">Reports & Audit</h2>
+          <p class="page__subtitle">NLG-generated explanations · SHAP attribution · Compliance audit trail</p>
+        </div>
+        <div class="stats stats--3">
+          <div class="stat-card stat-card--purple"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="284">0</span><span class="stat-card__label">Reports Generated</span></div></div>
+          <div class="stat-card stat-card--amber"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="18">0</span><span class="stat-card__label">SAR Filed</span></div></div>
+          <div class="stat-card stat-card--green"><div class="stat-card__icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div><div class="stat-card__body"><span class="stat-card__value" data-target="96">0</span><span class="stat-card__label">Audit Pass Rate %</span></div></div>
+        </div>
+        <div class="card">
+          <div class="card__header"><h2 class="card__title">Recent Audit Reports</h2></div>
+          <div class="card__body"><div class="table-wrap">
+            <table class="table"><thead><tr><th>Report ID</th><th>Entity</th><th>Type</th><th>Risk Score</th><th>Generated</th><th>Status</th><th>Download</th></tr></thead>
+            <tbody id="reportsBody"></tbody></table>
+          </div></div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ═══════════════════════════════════════════════════ -->
+  <!-- DETAIL VIEW MODAL                                   -->
+  <!-- ═══════════════════════════════════════════════════ -->
+  <div class="detail-view" id="detailView">
+    <div class="detail-modal">
+      <div id="detailViewContent"></div>
+    </div>
+  </div>
+
+  <!-- MOBILE SIDEBAR OVERLAY -->
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>

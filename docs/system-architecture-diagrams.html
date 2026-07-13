@@ -1,0 +1,1412 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BankGuard Enterprise · Core Specifications</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#060D1A;--surf:#091524;--card:#0D1B2E;--bord:#162840;
+  --text:#C8DCF2;--muted:#4A6482;--dim:#1A2E48;
+  --cyan:#00C8F8;--green:#00D78F;--amber:#F5A623;
+  --purple:#9260FF;--orange:#FF7230;--red:#FF3B5C;--neon:#00FFB2;
+}
+body{background:var(--bg);color:var(--text);font-family:'Segoe UI',system-ui,sans-serif;min-height:100vh;overflow-x:hidden}
+/* ── Header ── */
+.hdr{background:var(--surf);border-bottom:1px solid var(--bord);padding:12px 24px;
+  display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:99}
+.logo{font-family:'Courier New',monospace;font-size:13px;font-weight:700;color:var(--neon);letter-spacing:.1em}
+.logo-sub{font-family:'Courier New',monospace;font-size:8.5px;color:var(--muted);letter-spacing:.08em;margin-top:2px}
+.hdr-right{display:flex;align-items:center;gap:12px}
+.print-btn{font-family:'Courier New',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;
+  padding:5px 12px;border-radius:3px;cursor:pointer;border:1px solid var(--bord);
+  background:transparent;color:var(--muted);transition:all .2s}
+.print-btn:hover{border-color:var(--neon);color:var(--neon)}
+/* ── Tabs ── */
+.tabs-bar{background:var(--surf);border-bottom:1px solid var(--bord);padding:0 24px;
+  display:flex;gap:0;overflow-x:auto;scrollbar-width:none}
+.tabs-bar::-webkit-scrollbar{display:none}
+.tab{font-family:'Courier New',monospace;font-size:9.5px;font-weight:700;letter-spacing:.04em;
+  padding:10px 16px;cursor:pointer;border:none;background:transparent;
+  color:var(--muted);border-bottom:2px solid transparent;white-space:nowrap;transition:all .2s}
+.tab.active{color:var(--neon);border-bottom-color:var(--neon)}
+.tab:hover:not(.active){color:var(--text)}
+/* ── Content ── */
+.page{display:none;padding:24px 28px}
+.page.active{display:block}
+.page-hdr{margin-bottom:18px}
+.page-title{font-size:17px;font-weight:700;color:var(--text);letter-spacing:.02em}
+.page-meta{font-family:'Courier New',monospace;font-size:10px;color:var(--muted);margin-top:4px;line-height:1.5}
+.diagram-wrap{background:var(--card);border:1px solid var(--bord);border-radius:10px;
+  overflow:auto;padding:20px}
+.diagram-wrap svg{display:block;min-height:100px}
+.dlbtn{font-family:'Courier New',monospace;font-size:9px;font-weight:700;letter-spacing:.06em;
+  padding:5px 12px;border-radius:3px;cursor:pointer;border:1px solid var(--bord);
+  background:transparent;color:var(--muted);transition:all .2s;margin-top:12px;float:right}
+.dlbtn:hover{border-color:var(--cyan);color:var(--cyan)}
+/* ── Print ── */
+@media print{
+  .hdr .hdr-right,.tabs-bar{display:none}
+  .page{display:block!important;page-break-after:always;padding:10px}
+  body{background:#fff;color:#000}
+  .diagram-wrap{border:1px solid #ccc;background:#fff}
+}
+</style>
+</head>
+<body>
+
+<!-- Header -->
+<header class="hdr">
+  <div>
+    <div class="logo">BANKGUARD ENTERPRISE ◈ CORE ARCHITECTURE SPECIFICATIONS</div>
+    <div class="logo-sub">INTEGRATED TRANSACTION RISK ENGINE · SECURITY & AUDITING SYSTEM DESIGN SPECIFICATIONS</div>
+  </div>
+  <div class="hdr-right">
+    <button class="print-btn" onclick="window.print()">⎙ PRINT ALL</button>
+  </div>
+</header>
+
+<!-- Tab bar -->
+<div class="tabs-bar">
+  <button class="tab active" onclick="showPage('p1',this)">1 · System Architecture</button>
+  <button class="tab" onclick="showPage('p2',this)">2 · Entity Relationship</button>
+  <button class="tab" onclick="showPage('p3_0',this)">3 · DFD Level 0 (Context)</button>
+  <button class="tab" onclick="showPage('p3',this)">4 · DFD Level 1 (Data Flow)</button>
+  <button class="tab" onclick="showPage('p3_2',this)">5 · DFD Level 2 (Compliance)</button>
+  <button class="tab" onclick="showPage('p4',this)">6 · Sequence Diagram</button>
+  <button class="tab" onclick="showPage('p5',this)">7 · Component Architecture</button>
+  <button class="tab" onclick="showPage('p6',this)">8 · Deployment Architecture</button>
+  <button class="tab" onclick="showPage('p7',this)">9 · Analytics Pipeline</button>
+  <button class="tab" onclick="showPage('p8',this)">10 · UML Use Case Diagram</button>
+</div>
+
+<!-- Pages -->
+<div id="p1" class="page active">
+  <div class="page-hdr">
+    <div class="page-title">System Architecture Diagram</div>
+    <div class="page-meta">Six-module Analytics Engine · Module Categorization · SWIFT/CBS Cross-System Reconciliation Layer</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-arch"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-arch','bankguard-architecture.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p2" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Entity Relationship Diagram (ERD)</div>
+    <div class="page-meta">PostgreSQL schema · 10 core entities · Cardinality notation · Primary keys (🔑) and foreign keys (🔗) marked</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-erd"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-erd','bankguard-erd.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p3_0" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Data Flow Diagram — Level 0 (Context Diagram)</div>
+    <div class="page-meta">Yourdon-DeMarco notation · Centralized system process · Labeled system boundary flows</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-dfd0"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-dfd0','bankguard-dfd0.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p3" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Data Flow Diagram — Level 1</div>
+    <div class="page-meta">Yourdon-DeMarco notation · External entities · 6 processes · 5 data stores · Labeled data flows</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-dfd"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-dfd','bankguard-dfd.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p3_2" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Data Flow Diagram — Level 2 (Compliance Detail)</div>
+    <div class="page-meta">Yourdon-DeMarco notation · Decomposed SWIFT & CBS reconciliation sub-processes</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-dfd2"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-dfd2','bankguard-dfd2.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p4" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Sequence Diagram — SWIFT/CBS Fraud Detection</div>
+    <div class="page-meta">PNB/Nirav Modi scenario (₹485 Cr LoU) · 7 actors · 12 message steps · Real-time detection flow</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-seq"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-seq','bankguard-sequence.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p5" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Component Architecture Diagram</div>
+    <div class="page-meta">React.js frontend · FastAPI backend · ML analytics service layer · PostgreSQL · Neo4j · Redis · NLG report engine</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-comp"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-comp','bankguard-components.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p6" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Deployment Architecture Diagram</div>
+    <div class="page-meta">Docker containerized · Nginx reverse proxy · FastAPI workers · PostgreSQL + Neo4j + Redis · External APIs</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-deploy"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-deploy','bankguard-deployment.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p7" class="page">
+  <div class="page-hdr">
+    <div class="page-title">Analytics Pipeline Diagram</div>
+    <div class="page-meta">End-to-end analytical pipeline · Ingestion → Feature Engineering → 5 Parallel Analytics Models → Meta Aggregation → NLG Explanation</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-ml"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-ml','bankguard-mlpipeline.svg')">↓ Download SVG</button>
+</div>
+
+<div id="p8" class="page">
+  <div class="page-hdr">
+    <div class="page-title">UML Use Case Diagram</div>
+    <div class="page-meta">Standard UML notation · External Actor roles (Employee, Manager, Auditor) and system boundaries</div>
+  </div>
+  <div class="diagram-wrap"><div id="svg-usecase"></div></div>
+  <button class="dlbtn" onclick="downloadSVG('svg-usecase','bankguard-usecase.svg')">↓ Download SVG</button>
+</div>
+
+<script>
+// ──────────────────────────────────────────────────────────────
+// GLOBALS
+// ──────────────────────────────────────────────────────────────
+const C={bg:'#060D1A',surf:'#091524',card:'#0D1B2E',bord:'#162840',
+  text:'#C8DCF2',muted:'#4A6482',dim:'#1A2E48',
+  cyan:'#00C8F8',green:'#00D78F',amber:'#F5A623',
+  purple:'#9260FF',orange:'#FF7230',red:'#FF3B5C',neon:'#00FFB2'};
+const MONO="'Courier New',Courier,monospace";
+const rendered={};
+
+function showPage(id,btn){
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
+  if(!rendered[id]){rendered[id]=true;renderMap[id]();}
+}
+function downloadSVG(containerId,filename){
+  const svgEl=document.querySelector('#'+containerId+' svg');
+  if(!svgEl)return;
+  const data=new XMLSerializer().serializeToString(svgEl);
+  const blob=new Blob([data],{type:'image/svg+xml'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');a.href=url;a.download=filename;a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ── SVG helpers ──────────────────────────────────────────────
+const NS='http://www.w3.org/2000/svg';
+function el(tag,attrs={}){
+  const e=document.createElementNS(NS,tag);
+  Object.entries(attrs).forEach(([k,v])=>e.setAttribute(k,v));
+  return e;
+}
+function svgRoot(w,h){
+  return el('svg',{viewBox:`0 0 ${w} ${h}`,xmlns:NS,
+    style:`display:block;min-width:${w}px;font-family:${MONO};`});
+}
+function g(...children){const e=el('g');children.forEach(c=>c&&e.appendChild(c));return e;}
+function rect(x,y,w,h,opts={}){
+  return el('rect',{x,y,width:w,height:h,rx:opts.rx??6,
+    fill:opts.fill||C.card,stroke:opts.stroke||C.bord,'stroke-width':opts.sw||1,
+    ...(opts.extra||{})});
+}
+function txt(str,x,y,opts={}){
+  const t=el('text',{x,y,'text-anchor':opts.anchor||'middle',fill:opts.fill||C.text,
+    'font-size':opts.size||10,'font-weight':opts.weight||'normal',
+    'font-family':opts.mono!==false?MONO:'inherit',
+    'letter-spacing':opts.ls||'0',...(opts.extra||{})});
+  if(Array.isArray(str)){
+    str.forEach((s,i)=>{
+      const ts=el('tspan',{x,dy:i===0?'0':'1.3em'});
+      ts.textContent=s;t.appendChild(ts);
+    });
+  }else{t.textContent=str;}
+  return t;
+}
+function line(x1,y1,x2,y2,opts={}){
+  return el('line',{x1,y1,x2,y2,stroke:opts.stroke||C.bord,
+    'stroke-width':opts.sw||1.5,'stroke-dasharray':opts.dash||'none'});
+}
+function arrow(x1,y1,x2,y2,color,sw=1.5){
+  const g2=el('g');
+  g2.appendChild(line(x1,y1,x2,y2-7,{stroke:color,sw}));
+  g2.appendChild(el('polygon',{points:`${x2},${y2} ${x2-5},${y2-7} ${x2+5},${y2-7}`,fill:color}));
+  return g2;
+}
+function arrowH(x1,y,x2,color,sw=1.5){
+  const g2=el('g');
+  g2.appendChild(line(x1,y,x2-7,y,{stroke:color,sw}));
+  g2.appendChild(el('polygon',{points:`${x2},${y} ${x2-7},${y-5} ${x2-7},${y+5}`,fill:color}));
+  return g2;
+}
+function badge(x,y,w,label,col){
+  const bg=g();
+  bg.appendChild(rect(x,y,w,15,{fill:`${col}15`,stroke:col,sw:.7,rx:2,extra:{'stroke-opacity':'.6'}}));
+  bg.appendChild(txt(label,x+w/2,y+10.5,{fill:col,size:8,weight:'700',ls:'.5'}));
+  return bg;
+}
+function colTop(x,y,w,h,col,title,lines,tag,tagColor){
+  const gg=el('g');
+  gg.appendChild(rect(x,y,w,h,{fill:`${col}0D`,stroke:col,sw:.8,extra:{'stroke-opacity':'.45'}}));
+  gg.appendChild(rect(x,y,w,3,{fill:col,stroke:'none',rx:3}));
+  if(tag) gg.appendChild(badge(x+w-50,y+8,46,tag,tagColor||C.amber));
+  const titleLines=Array.isArray(title)?title:[title];
+  titleLines.forEach((t,i)=>gg.appendChild(txt(t,x+w/2,y+22+i*14,{fill:col,size:10,weight:'700'})));
+  const noteY=y+22+titleLines.length*14+5;
+  lines.forEach((l,i)=>gg.appendChild(txt('→ '+l,x+6,noteY+i*13,{anchor:'start',fill:C.muted,size:8.5})));
+  return gg;
+}
+
+// ── DEFS helper (arrowhead markers) ─────────────────────────
+function makeDefs(svg,colors){
+  const defs=el('defs');
+  colors.forEach(([id,col])=>{
+    const m=el('marker',{id,markerWidth:'9',markerHeight:'9',refX:'8',refY:'3',orient:'auto'});
+    m.appendChild(el('path',{d:'M0,0 L0,6 L8,3 z',fill:col}));
+    defs.appendChild(m);
+  });
+  svg.appendChild(defs);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 1 — SYSTEM ARCHITECTURE
+// ──────────────────────────────────────────────────────────────
+function renderArch(){
+  const W=1060,H=890;
+  const s=svgRoot(W,H);
+  // bg
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+
+  const CX=[132,326,520,714,908]; // column centers
+  const CL=[50,244,438,632,826];  // column left edges
+  const CW=164;
+
+  const mods=[
+    {color:C.cyan,  srcLabel:'EMPLOYEE DATA',    srcSub:'Logs · Actions · Terminals',
+     procTitle:['Isolation Forest','+ Peer Group UEBA'],
+     notes:['vs. same-role peer baselines','Biometric signals (BioCatch)','class-based anomaly detection'],
+     sig:'Behavior Risk'},
+    {color:C.green, srcLabel:'LOAN DATA',         srcSub:'Applications · Approvals',
+     procTitle:['Rules + XGBoost','+ SHAP Values'],
+     notes:['Explainable fraud probability','Class-weighted for rare fraud','SHAP for regulatory audit'],
+     sig:'Loan Risk'},
+    {color:C.amber, srcLabel:'WORKFLOW & SWIFT',  srcSub:'Process steps · SWIFT msgs',
+     procTitle:['JSON Policy Engine','+ SWIFT/CBS Reconciler'],
+     notes:['SWIFT msg → CBS cross-check','Catches PNB LoU gap directly','Rules as editable JSON table'],
+     sig:'Compliance Risk'},
+    {color:C.purple,srcLabel:'COMMUNICATIONS',    srcSub:'Emails · Chats · Calls',
+     procTitle:['Sentence Transformer','+ Intent Classification','+ Entity Extraction'],
+     notes:['Zero-shot bribery intent score','Entities flow → Graph module','Beyond keyword matching'],
+     sig:'Comms Risk'},
+    {color:C.orange,srcLabel:'RELATION DATA',     srcSub:'Shared IDs · Networks',
+     procTitle:['Neo4j + Louvain','+ Centrality + Paths'],
+     notes:['Collusion cluster detection','Hub/path analysis named','[GNN: GraphSAGE future scope]'],
+     sig:'Relation Risk'},
+  ];
+
+  // Title
+  s.appendChild(txt('BANKGUARD ENTERPRISE — SYSTEM ARCHITECTURE',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('Behavioral Threat & Fraud Detection · Six-Module Analytics Engine',W/2,38,{fill:C.muted,size:9}));
+
+  // Layer 0: RAW DATA
+  const L0Y=50;
+  s.appendChild(rect(50,L0Y,960,52,{fill:C.card,stroke:C.bord,sw:1.2}));
+  s.appendChild(rect(50,L0Y,960,3,{fill:C.dim,stroke:'none',rx:4}));
+  s.appendChild(txt('RAW BANK DATA',W/2,L0Y+22,{fill:C.muted,size:11,weight:'700',ls:'3'}));
+  s.appendChild(txt('All incoming events: transactions · access logs · SWIFT messages · communications · relationship identifiers',W/2,L0Y+40,{fill:C.dim,size:8.5}));
+
+  // arrows L0→L1
+  CX.forEach(cx=>s.appendChild(arrow(cx,L0Y+52,cx,L0Y+78,C.bord)));
+
+  // Layer 1: Data Sources
+  const L1Y=L0Y+78;
+  mods.forEach((m,i)=>{
+    s.appendChild(rect(CL[i],L1Y,CW,55,{fill:`${m.color}0A`,stroke:m.color,sw:.7,extra:{'stroke-opacity':'.4'}}));
+    s.appendChild(rect(CL[i],L1Y,CW,3,{fill:m.color,stroke:'none',rx:3}));
+    s.appendChild(txt(m.srcLabel,CX[i],L1Y+22,{fill:m.color,size:9.5,weight:'700',ls:'0.5'}));
+    s.appendChild(txt(m.srcSub,CX[i],L1Y+37,{fill:C.muted,size:8.5}));
+  });
+  // section label
+  s.appendChild(txt('DATA SOURCES',55,L1Y-5,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+
+  // arrows L1→L2
+  const L2Y=L1Y+80;
+  CX.forEach(cx=>s.appendChild(arrow(cx,L1Y+55,cx,L2Y,C.bord)));
+
+  // Layer 2: Processing Modules
+  s.appendChild(txt('PROCESSING MODULES',55,L2Y-5,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  mods.forEach((m,i)=>{
+    const cc=colTop(CL[i],L2Y,CW,148,m.color,m.procTitle,m.notes,m.tag,m.tagC||C.amber);
+    s.appendChild(cc);
+    // output signal label at bottom
+    s.appendChild(txt('↓ '+m.sig,CX[i],L2Y+155,{fill:m.color,size:8.5,weight:'700',extra:{opacity:'.7'}}));
+  });
+
+  // gather lines L2→L3 signals
+  const L3Y=L2Y+168;
+  CX.forEach(cx=>s.appendChild(line(cx,L2Y+148,cx,L3Y,{stroke:C.bord,sw:1.2})));
+  // horizontal gather
+  s.appendChild(line(CX[0],L3Y,CX[4],L3Y,{stroke:C.bord,sw:1,dash:'5,4'}));
+
+  // Layer 3: Risk Signals
+  s.appendChild(txt('RISK SIGNALS',55,L3Y+5,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  mods.forEach((m,i)=>{
+    s.appendChild(rect(CL[i],L3Y+2,CW,42,{fill:`${m.color}0A`,stroke:m.color,sw:.7,rx:5,extra:{'stroke-opacity':'.4'}}));
+    s.appendChild(rect(CL[i],L3Y+2,CW,3,{fill:m.color,stroke:'none',rx:3}));
+    s.appendChild(txt(m.sig,CX[i],L3Y+26,{fill:m.color,size:9.5,weight:'700'}));
+  });
+
+  // gather funnel → Correlator
+  const L4Y=L3Y+80;
+  CX.forEach((cx,i)=>{
+    const targetX=520;
+    s.appendChild(el('line',{x1:cx,y1:L3Y+44,x2:cx,y2:L3Y+56,stroke:C.bord,'stroke-width':'1.2'}));
+  });
+  s.appendChild(line(CX[0],L3Y+56,CX[4],L3Y+56,{stroke:C.bord,sw:1,dash:'4,3'}));
+  s.appendChild(arrow(520,L3Y+56,520,L4Y,C.neon));
+
+  // Layer 4: Cross-Signal Correlator
+  const box4=g();
+  box4.appendChild(rect(50,L4Y,960,68,{fill:`${C.neon}08`,stroke:C.neon,sw:1.2,extra:{'stroke-opacity':'.5'}}));
+  box4.appendChild(rect(50,L4Y,960,3,{fill:C.neon,stroke:'none',rx:3}));
+  box4.appendChild(txt('CROSS-SIGNAL CORRELATOR',W/2,L4Y+25,{fill:C.neon,size:12,weight:'700',ls:'1'}));
+  box4.appendChild(txt('Do multiple modules flag the SAME employee, loan, or entity?  →  Correlation bonus added to final score  ·  3 medium signals > 1 high signal in isolation',W/2,L4Y+46,{fill:'#5AFFE0',size:9}));
+  box4.appendChild(txt('This is the layer that catches coordinated fraud (e.g. PNB: CBS gap + UEBA anomaly + authority breach all pointing at the same person)',W/2,L4Y+60,{fill:C.muted,size:8}));
+  s.appendChild(box4);
+
+  // arrow L4→L5
+  const L5Y=L4Y+100;
+  s.appendChild(arrow(520,L4Y+68,520,L5Y,C.red));
+
+  // Layer 5: Risk Engine
+  const box5=g();
+  box5.appendChild(rect(50,L5Y,960,68,{fill:`${C.red}08`,stroke:C.red,sw:1,extra:{'stroke-opacity':'.4'}}));
+  box5.appendChild(rect(50,L5Y,960,3,{fill:C.red,stroke:'none',rx:3}));
+  box5.appendChild(txt('WEIGHTED META RISK ENGINE',W/2,L5Y+25,{fill:C.red,size:12,weight:'700',ls:'1'}));
+  box5.appendChild(txt('Trained meta-model over 5 module scores + correlation bonus  →  Final Risk Score (0–100)  ·  Threat Level: LOW / MEDIUM / HIGH / CRITICAL',W/2,L5Y+45,{fill:'#FF8A9A',size:9}));
+  box5.appendChild(txt('Actions: Monitor · Notify · Hold Loan · Freeze Account · Escalate to Audit Team',W/2,L5Y+60,{fill:C.muted,size:8.5}));
+  s.appendChild(box5);
+
+  // arrow L5→L6
+  const L6Y=L5Y+100;
+  s.appendChild(arrow(520,L5Y+68,520,L6Y,C.purple));
+
+  // Layer 6: Explanation Generator
+  const box6=g();
+  box6.appendChild(rect(50,L6Y,960,68,{fill:`${C.purple}08`,stroke:C.purple,sw:1,extra:{'stroke-opacity':'.4'}}));
+  box6.appendChild(rect(50,L6Y,960,3,{fill:C.purple,stroke:'none',rx:3}));
+  box6.appendChild(txt('EXPLANATION GENERATOR (NLG)',W/2,L6Y+25,{fill:C.purple,size:12,weight:'700',ls:'1'}));
+  box6.appendChild(txt('SHAP values + Rule triggers + Graph paths  →  NLG Engine  →  Auditor-readable natural-language note',W/2,L6Y+45,{fill:'#C4A8FF',size:9}));
+  box6.appendChild(txt('Grounded strictly in model output — not free-written — to prevent plausible-but-unfaithful explanations under regulatory scrutiny',W/2,L6Y+60,{fill:C.muted,size:8}));
+  s.appendChild(box6);
+
+  // arrow L6→L7
+  const L7Y=L6Y+100;
+  s.appendChild(arrow(520,L6Y+68,520,L7Y,C.bord));
+
+  // Layer 7: Dashboard
+  const box7=g();
+  box7.appendChild(rect(50,L7Y,960,62,{fill:C.card,stroke:C.bord,sw:1}));
+  box7.appendChild(rect(50,L7Y,960,3,{fill:C.muted,stroke:'none',rx:3}));
+  box7.appendChild(txt('REACT DASHBOARD',W/2,L7Y+24,{fill:C.text,size:12,weight:'700',ls:'1'}));
+  box7.appendChild(txt('RBAC role views (Manager · Compliance Officer · Auditor)  ·  WebSocket live alerts  ·  Neo4j subgraph visualisation  ·  SHAP waterfall charts  ·  Audit trail export',W/2,L7Y+44,{fill:C.muted,size:9}));
+  s.appendChild(box7);
+
+  // Legend
+  const LGX=55,LGY=H-28;
+  [[C.cyan,'UEBA'],[C.green,'Loan Intel'],[C.amber,'Compliance'],[C.purple,'NLP'],[C.orange,'Graph'],[C.red,'Risk Engine'],[C.neon,'Cross-Signal']].forEach(([col,lbl],i)=>{
+    const ox=i*120;
+    s.appendChild(el('circle',{cx:LGX+ox+6,cy:LGY+5,r:'5',fill:col}));
+    s.appendChild(txt(lbl,LGX+ox+16,LGY+9,{anchor:'start',fill:C.muted,size:8.5}));
+  });
+
+  document.getElementById('svg-arch').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 2 — ERD
+// ──────────────────────────────────────────────────────────────
+function renderERD(){
+  const W=1260,H=960;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('BANKGUARD ENTERPRISE — ENTITY RELATIONSHIP DIAGRAM',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('PostgreSQL Schema · 10 Core Entities · Cardinality Notation · PK (🔑) and FK (🔗) marked',W/2,38,{fill:C.muted,size:9}));
+
+  function entity(x,y,w,title,color,attrs){
+    const ROW=17,HEAD=28;
+    const h=HEAD+attrs.length*ROW+4;
+    const gg=el('g');
+    // shadow
+    gg.appendChild(rect(x+3,y+3,w,h,{fill:'#00000033',stroke:'none',rx:6}));
+    // body
+    gg.appendChild(rect(x,y,w,h,{fill:'#0A1525',stroke:color,sw:1.2,rx:6,extra:{'stroke-opacity':'.6'}}));
+    // header
+    gg.appendChild(rect(x,y,w,HEAD,{fill:`${color}22`,stroke:'none',rx:6}));
+    gg.appendChild(rect(x,y+HEAD-4,w,4,{fill:`${color}22`,stroke:'none',rx:0}));
+    gg.appendChild(txt(title,x+w/2,y+HEAD-9,{fill:color,size:10,weight:'700',ls:'.5'}));
+    // divider
+    gg.appendChild(line(x,y+HEAD,x+w,y+HEAD,{stroke:`${color}33`,sw:.8}));
+    // attributes
+    attrs.forEach((a,i)=>{
+      const ay=y+HEAD+4+i*ROW;
+      if(i%2===0) gg.appendChild(rect(x+1,ay-1,w-2,ROW,{fill:'#FFFFFF04',stroke:'none',rx:2}));
+      let prefix='';
+      if(a.pk) prefix='🔑 ';
+      else if(a.fk) prefix='🔗 ';
+      const fc=a.pk?C.amber:a.fk?C.cyan:C.text;
+      const fw=a.pk||a.fk?'700':'normal';
+      gg.appendChild(txt(prefix+a.n,x+8,ay+12,{anchor:'start',fill:fc,size:8.5,weight:fw}));
+      gg.appendChild(txt(a.t,x+w-6,ay+12,{anchor:'end',fill:C.muted,size:8}));
+    });
+    return {el:gg,x,y,w,h};
+  }
+
+  function relLine(ex1,ey1,ex2,ey2,label,c1,c2,color=C.bord){
+    const gg=el('g');
+    const mx=(ex1+ex2)/2,my=(ey1+ey2)/2;
+    const path=el('path',{d:`M${ex1},${ey1} C${mx},${ey1} ${mx},${ey2} ${ex2},${ey2}`,
+      fill:'none',stroke:color,'stroke-width':'1.2','stroke-opacity':'.7','stroke-dasharray':'5,3'});
+    gg.appendChild(path);
+    // cardinality labels
+    gg.appendChild(txt(c1,ex1+(ex2-ex1)*0.12,ey1+(ey2-ey1)*0.12-6,{fill:color,size:8,weight:'700'}));
+    gg.appendChild(txt(c2,ex1+(ex2-ex1)*0.88,ey1+(ey2-ey1)*0.88-6,{fill:color,size:8,weight:'700'}));
+    // midpoint label
+    const bg=rect(mx-label.length*2.8,my-8,label.length*5.6+4,12,{fill:C.bg,stroke:'none',rx:2});
+    gg.appendChild(bg);
+    gg.appendChild(txt(label,mx,my+1,{fill:C.muted,size:8}));
+    return gg;
+  }
+
+  // Define entities
+  const E={};
+
+  E.emp=entity(40,58,220,'EMPLOYEE',C.cyan,[
+    {n:'emp_id',t:'UUID',pk:true},
+    {n:'name',t:'VARCHAR(100)'},
+    {n:'role',t:'ENUM(officer,mgr,teller)'},
+    {n:'branch_id',t:'UUID',fk:true},
+    {n:'department',t:'VARCHAR(50)'},
+    {n:'clearance_level',t:'INTEGER'},
+    {n:'joined_date',t:'DATE'},
+    {n:'is_active',t:'BOOLEAN'},
+  ]);
+
+  E.branch=entity(320,58,210,'BRANCH',C.green,[
+    {n:'branch_id',t:'UUID',pk:true},
+    {n:'name',t:'VARCHAR(100)'},
+    {n:'location',t:'VARCHAR(200)'},
+    {n:'swift_code',t:'VARCHAR(11)'},
+    {n:'region',t:'VARCHAR(50)'},
+    {n:'head_emp_id',t:'UUID',fk:true},
+  ]);
+
+  E.bhvlog=entity(40,340,220,'BEHAVIOR_LOG',C.cyan,[
+    {n:'log_id',t:'UUID',pk:true},
+    {n:'emp_id',t:'UUID',fk:true},
+    {n:'login_ts',t:'TIMESTAMPTZ'},
+    {n:'logout_ts',t:'TIMESTAMPTZ'},
+    {n:'ip_address',t:'INET'},
+    {n:'device_id',t:'VARCHAR(50)'},
+    {n:'loans_approved',t:'INTEGER'},
+    {n:'anomaly_score',t:'FLOAT(5)'},
+  ]);
+
+  E.loan=entity(590,58,230,'LOAN',C.green,[
+    {n:'loan_id',t:'UUID',pk:true},
+    {n:'applicant_id',t:'UUID',fk:true},
+    {n:'officer_id',t:'UUID',fk:true},
+    {n:'branch_id',t:'UUID',fk:true},
+    {n:'amount',t:'DECIMAL(18,2)'},
+    {n:'status',t:'ENUM(pending,approved,held)'},
+    {n:'application_ts',t:'TIMESTAMPTZ'},
+    {n:'risk_score',t:'FLOAT(5)'},
+  ]);
+
+  E.applicant=entity(320,340,220,'APPLICANT',C.green,[
+    {n:'applicant_id',t:'UUID',pk:true},
+    {n:'name',t:'VARCHAR(100)'},
+    {n:'pan_number',t:'CHAR(10)'},
+    {n:'income',t:'DECIMAL(14,2)'},
+    {n:'credit_score',t:'INTEGER'},
+    {n:'kyc_status',t:'ENUM(pending,verified)'},
+    {n:'address',t:'TEXT'},
+  ]);
+
+  E.compliance=entity(590,340,230,'COMPLIANCE_CHECKPOINT',C.amber,[
+    {n:'check_id',t:'UUID',pk:true},
+    {n:'loan_id',t:'UUID',fk:true},
+    {n:'kyc_verified',t:'BOOLEAN'},
+    {n:'income_verified',t:'BOOLEAN'},
+    {n:'property_verified',t:'BOOLEAN'},
+    {n:'credit_checked',t:'BOOLEAN'},
+    {n:'senior_approved',t:'BOOLEAN'},
+    {n:'missing_count',t:'INTEGER'},
+  ]);
+
+  E.swift=entity(880,58,220,'SWIFT_MESSAGE',C.amber,[
+    {n:'swift_id',t:'UUID',pk:true},
+    {n:'msg_type',t:'VARCHAR(6)'},
+    {n:'sender_emp_id',t:'UUID',fk:true},
+    {n:'amount',t:'DECIMAL(18,2)'},
+    {n:'beneficiary',t:'VARCHAR(150)'},
+    {n:'dest_bank',t:'VARCHAR(100)'},
+    {n:'sent_at',t:'TIMESTAMPTZ'},
+    {n:'cbs_matched',t:'BOOLEAN'},
+    {n:'risk_flag',t:'BOOLEAN'},
+  ]);
+
+  E.cbs=entity(880,370,220,'CBS_RECORD',C.amber,[
+    {n:'cbs_id',t:'UUID',pk:true},
+    {n:'swift_ref',t:'UUID',fk:true},
+    {n:'account_id',t:'VARCHAR(20)'},
+    {n:'amount',t:'DECIMAL(18,2)'},
+    {n:'txn_type',t:'VARCHAR(20)'},
+    {n:'recorded_at',t:'TIMESTAMPTZ'},
+    {n:'reconciled',t:'BOOLEAN'},
+  ]);
+
+  E.comms=entity(40,640,220,'COMMUNICATION_LOG',C.purple,[
+    {n:'comm_id',t:'UUID',pk:true},
+    {n:'sender_emp_id',t:'UUID',fk:true},
+    {n:'receiver_id',t:'VARCHAR(100)'},
+    {n:'channel',t:'ENUM(email,chat,call)'},
+    {n:'comm_ts',t:'TIMESTAMPTZ'},
+    {n:'nlp_score',t:'FLOAT(5)'},
+    {n:'intent_score',t:'FLOAT(5)'},
+    {n:'flagged',t:'BOOLEAN'},
+  ]);
+
+  E.alert=entity(590,640,230,'ALERT',C.red,[
+    {n:'alert_id',t:'UUID',pk:true},
+    {n:'entity_id',t:'UUID'},
+    {n:'entity_type',t:'ENUM(employee,loan,swift)'},
+    {n:'module',t:'VARCHAR(20)'},
+    {n:'risk_score',t:'FLOAT(5)'},
+    {n:'threat_level',t:'ENUM(low,med,high,crit)'},
+    {n:'action_taken',t:'VARCHAR(50)'},
+    {n:'created_ts',t:'TIMESTAMPTZ'},
+  ]);
+
+  // Draw all entities
+  Object.values(E).forEach(e=>s.appendChild(e.el));
+
+  // Relationship lines
+  // Employee → Branch (N:1)
+  s.appendChild(relLine(260,110,320,110,'works at','N','1',C.cyan));
+  // Employee → BehaviorLog (1:N)
+  s.appendChild(relLine(150,207,150,340,'generates','1','N',C.cyan));
+  // Employee → SWIFT (1:N)
+  s.appendChild(relLine(260,145,880,145,'issues','1','N',C.amber));
+  // Employee → Loan (1:N as officer)
+  s.appendChild(relLine(260,120,590,120,'approves','1','N',C.green));
+  // Loan → Applicant (N:1)
+  s.appendChild(relLine(590,200,540,410,'has','N','1',C.green));
+  // Loan → Compliance (1:1)
+  s.appendChild(relLine(705,227,705,340,'has checkpoint','1','1',C.amber));
+  // SWIFT → CBS (1:0..1)
+  s.appendChild(relLine(990,227,990,370,'matches','1','0..1',C.amber));
+  // Employee → CommunicationLog (1:N)
+  s.appendChild(relLine(150,207,150,640,'sends','1','N',C.purple));
+  // Loan → Alert (1:N)
+  s.appendChild(relLine(705,227,705,640,'triggers','1','N',C.red));
+  // SWIFT → Alert
+  s.appendChild(relLine(990,237,820,708,'triggers','1','N',C.red));
+
+  // Legend
+  const LE=[[C.cyan,'UEBA/Behavior'],[C.green,'Loan/Applicant'],[C.amber,'Compliance/SWIFT'],[C.purple,'Communication'],[C.red,'Alert/Risk']];
+  s.appendChild(txt('ENTITY COLOR CODING',55,H-38,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  LE.forEach(([col,lbl],i)=>{
+    s.appendChild(rect(55+i*185,H-26,10,10,{fill:`${col}30`,stroke:col,sw:.8,rx:2}));
+    s.appendChild(txt(lbl,72+i*185,H-17,{anchor:'start',fill:C.muted,size:8.5}));
+  });
+
+  document.getElementById('svg-erd').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 3 — DFD Level 0 (Context Diagram)
+// ──────────────────────────────────────────────────────────────
+function renderDFD0(){
+  const W=1000,H=600;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('BANKGUARD ENTERPRISE — DFD LEVEL 0 (CONTEXT DIAGRAM)',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('Yourdon-DeMarco Notation · System Boundary & External Entities',W/2,38,{fill:C.muted,size:9}));
+
+  function ext2(x,y,w,h,label){
+    const gg=el('g');
+    gg.appendChild(rect(x+3,y+3,w,h,{fill:'none',stroke:C.bord,sw:1,rx:4}));
+    gg.appendChild(rect(x,y,w,h,{fill:`${C.dim}60`,stroke:C.text,sw:1.4,rx:4}));
+    const lines=label.split('\n');
+    lines.forEach((l,i)=>gg.appendChild(txt(l,x+w/2,y+h/2-(lines.length-1)*7+i*14,{fill:C.text,size:9,weight:'700'})));
+    return gg;
+  }
+  function proc2(cx,cy,rx2,ry,pid,label,color){
+    const gg=el('g');
+    gg.appendChild(el('ellipse',{cx,cy,rx:rx2,ry,fill:`${color}10`,stroke:color,'stroke-width':'1.3','stroke-opacity':'.7'}));
+    gg.appendChild(txt(`P${pid}`,cx,cy-ry+18,{fill:color,size:8,weight:'700'}));
+    const lines=label.split('\n');
+    const startY=cy-(lines.length-1)*6;
+    lines.forEach((l,i)=>gg.appendChild(txt(l,cx,startY+i*13,{fill:color,size:9,weight:'700'})));
+    return gg;
+  }
+  function fl(x1,y1,x2,y2,label,color=C.muted){
+    const gg=el('g');
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    const len=Math.sqrt((x2-x1)**2+(y2-y1)**2);
+    const ux=(x2-x1)/len,uy=(y2-y1)/len;
+    const ex=x2-ux*8,ey=y2-uy*8;
+    gg.appendChild(el('line',{x1,y1,x2:ex,y2:ey,stroke:color,'stroke-width':'1.2'}));
+    const px=-uy*5,py=ux*5;
+    gg.appendChild(el('polygon',{
+      points:`${x2},${y2} ${ex+px},${ey+py} ${ex-px},${ey-py}`,fill:color}));
+    if(label){
+      gg.appendChild(rect(mx-label.length*2.3-2,my-9,label.length*4.6+6,12,{fill:C.bg,stroke:'none',rx:2}));
+      gg.appendChild(txt(label,mx,my+1,{fill:C.muted,size:7.5}));
+    }
+    return gg;
+  }
+
+  // Central process (represents the whole system)
+  const systemCX=W/2, systemCY=H/2;
+  s.appendChild(proc2(systemCX,systemCY,130,70,'0','BankGuard Risk\nManagement System',C.neon));
+
+  // External entities
+  const EE={
+    emp:   {x:100, y:80,  w:120, h:50, label:'Bank Employee\n(Terminal/User)'},
+    appl:  {x:100, y:470, w:120, h:50, label:'Loan Applicant'},
+    swift: {x:780, y:80,  w:120, h:50, label:'SWIFT Network'},
+    cbs:   {x:780, y:470, w:120, h:50, label:'Core Banking\nSystem (CBS)'},
+    audit: {x:440, y:80,  w:120, h:50, label:'Auditor /\nRegulator'},
+  };
+
+  Object.values(EE).forEach(e=>s.appendChild(ext2(e.x,e.y,e.w,e.h,e.label)));
+
+  // Flows
+  // Employee -> System
+  s.appendChild(fl(EE.emp.x+EE.emp.w, EE.emp.y+15, systemCX-60, systemCY-35, 'Logins & terminal actions', C.cyan));
+  s.appendChild(fl(EE.emp.x+EE.emp.w, EE.emp.y+35, systemCX-90, systemCY-15, 'Loan reviews & overrides', C.green));
+
+  // System -> Employee
+  s.appendChild(fl(systemCX-110, systemCY-35, EE.emp.x+EE.emp.w-20, EE.emp.y+45, 'Threat alerts & notifications', C.red));
+
+  // Applicant -> System
+  s.appendChild(fl(EE.appl.x+EE.appl.w, EE.appl.y+20, systemCX-80, systemCY+30, 'Application details & KYC', C.green));
+
+  // SWIFT -> System
+  s.appendChild(fl(EE.swift.x, EE.swift.y+25, systemCX+80, systemCY-30, 'SWIFT message streams', C.amber));
+
+  // CBS <-> System
+  s.appendChild(fl(EE.cbs.x, EE.cbs.y+15, systemCX+80, systemCY+30, 'Transaction logs', C.amber));
+  s.appendChild(fl(systemCX+110, systemCY+25, EE.cbs.x, EE.cbs.y+35, 'Account hold/reconcile actions', C.red));
+
+  // System -> Auditor
+  s.appendChild(fl(systemCX, systemCY-70, EE.audit.x+EE.audit.w/2, EE.audit.y+EE.audit.h, 'Risk logs & audit reports', C.purple));
+
+  document.getElementById('svg-dfd0').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 4 — DFD Level 1
+// ──────────────────────────────────────────────────────────────
+function renderDFD(){
+  const W=1120,H=860;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('BANKGUARD ENTERPRISE — DATA FLOW DIAGRAM (LEVEL 1)',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('Yourdon-DeMarco Notation · External Entities (rectangles) · Processes (ovals) · Data Stores (open bars)',W/2,38,{fill:C.muted,size:9}));
+
+
+
+  function ext2(x,y,w,h,label){
+    const gg=el('g');
+    gg.appendChild(rect(x+3,y+3,w,h,{fill:'none',stroke:C.bord,sw:1,rx:4}));
+    gg.appendChild(rect(x,y,w,h,{fill:`${C.dim}60`,stroke:C.text,sw:1.4,rx:4}));
+    const lines=label.split('\n');
+    lines.forEach((l,i)=>gg.appendChild(txt(l,x+w/2,y+h/2-(lines.length-1)*7+i*14,{fill:C.text,size:9,weight:'700'})));
+    return gg;
+  }
+  function proc2(cx,cy,rx2,ry,pid,label,color){
+    const gg=el('g');
+    gg.appendChild(el('ellipse',{cx,cy,rx:rx2,ry,fill:`${color}10`,stroke:color,'stroke-width':'1.3','stroke-opacity':'.7'}));
+    gg.appendChild(txt(`P${pid}`,cx,cy-ry+18,{fill:color,size:8,weight:'700'}));
+    const lines=label.split('\n');
+    const startY=cy-(lines.length-1)*6;
+    lines.forEach((l,i)=>gg.appendChild(txt(l,cx,startY+i*13,{fill:color,size:9,weight:'700'})));
+    return gg;
+  }
+  function store2(x,y,w,sid,label,color){
+    const gg=el('g');
+    gg.appendChild(line(x,y,x+w,y,{stroke:color,sw:1.2}));
+    gg.appendChild(line(x,y+24,x+w,y+24,{stroke:color,sw:1.2}));
+    gg.appendChild(rect(x,y,28,24,{fill:`${color}18`,stroke:color,sw:1,rx:0}));
+    gg.appendChild(txt(sid,x+14,y+15.5,{fill:color,size:7.5,weight:'700'}));
+    gg.appendChild(txt(label,x+34,y+15.5,{anchor:'start',fill:C.text,size:8.5}));
+    return gg;
+  }
+  function fl(x1,y1,x2,y2,label,color=C.muted){
+    const gg=el('g');
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    const len=Math.sqrt((x2-x1)**2+(y2-y1)**2);
+    const ux=(x2-x1)/len,uy=(y2-y1)/len;
+    const ex=x2-ux*8,ey=y2-uy*8;
+    gg.appendChild(el('line',{x1,y1,x2:ex,y2:ey,stroke:color,'stroke-width':'1.2'}));
+    const px=-uy*5,py=ux*5;
+    gg.appendChild(el('polygon',{
+      points:`${x2},${y2} ${ex+px},${ey+py} ${ex-px},${ey-py}`,fill:color}));
+    if(label){
+      const angle=Math.atan2(y2-y1,x2-x1)*180/Math.PI;
+      const isRight=Math.abs(angle)<90;
+      gg.appendChild(rect(mx-label.length*2.3-2,my-9,label.length*4.6+6,12,{fill:C.bg,stroke:'none',rx:2}));
+      gg.appendChild(txt(label,mx,my+1,{fill:C.muted,size:7.5}));
+    }
+    return gg;
+  }
+
+  // Positions
+  // External entities
+  const EE={
+    emp: {x:30,y:180,w:80,h:50},
+    appl:{x:30,y:430,w:80,h:50},
+    swift:{x:30,y:680,w:80,h:50},
+    audit:{x:1010,y:180,w:90,h:50},
+    cbs:  {x:1010,y:430,w:90,h:50},
+  };
+  s.appendChild(ext2(EE.emp.x,EE.emp.y,EE.emp.w,EE.emp.h,'Bank\nEmployee'));
+  s.appendChild(ext2(EE.appl.x,EE.appl.y,EE.appl.w,EE.appl.h,'Loan\nApplicant'));
+  s.appendChild(ext2(EE.swift.x,EE.swift.y,EE.swift.w,EE.swift.h,'SWIFT\nNetwork'));
+  s.appendChild(ext2(EE.audit.x,EE.audit.y,EE.audit.w,EE.audit.h,'Auditor /\nRegulator'));
+  s.appendChild(ext2(EE.cbs.x,EE.cbs.y,EE.cbs.w,EE.cbs.h,'Core Banking\nSystem (CBS)'));
+
+  // Processes (ovals)
+  const PP={
+    p1:{cx:240,cy:195,rx:90,ry:40},  // UEBA
+    p2:{cx:460,cy:195,rx:90,ry:40},  // Loan Monitor
+    p3:{cx:680,cy:195,rx:90,ry:40},  // Compliance
+    p4:{cx:240,cy:490,rx:90,ry:40},  // NLP Analyzer
+    p5:{cx:460,cy:490,rx:90,ry:40},  // Graph Engine
+    p6:{cx:660,cy:490,rx:90,ry:40},  // Risk Aggregator
+  };
+  s.appendChild(proc2(PP.p1.cx,PP.p1.cy,PP.p1.rx,PP.p1.ry,'1','UEBA\nEngine',C.cyan));
+  s.appendChild(proc2(PP.p2.cx,PP.p2.cy,PP.p2.rx,PP.p2.ry,'2','Loan\nMonitor',C.green));
+  s.appendChild(proc2(PP.p3.cx,PP.p3.cy,PP.p3.rx,PP.p3.ry,'3','Compliance\nEngine',C.amber));
+  s.appendChild(proc2(PP.p4.cx,PP.p4.cy,PP.p4.rx,PP.p4.ry,'4','NLP\nAnalyzer',C.purple));
+  s.appendChild(proc2(PP.p5.cx,PP.p5.cy,PP.p5.rx,PP.p5.ry,'5','Graph\nEngine',C.orange));
+  s.appendChild(proc2(PP.p6.cx,PP.p6.cy,PP.p6.rx,PP.p6.ry,'6','Risk\nAggregator',C.red));
+
+  // Data stores
+  s.appendChild(store2(200,330,280,'D1','Employee Behavior DB',C.cyan));
+  s.appendChild(store2(500,330,220,'D2','Loan & Applicant DB',C.green));
+  s.appendChild(store2(760,330,230,'D3','SWIFT / CBS DB',C.amber));
+  s.appendChild(store2(200,600,210,'D4','Communication DB',C.purple));
+  s.appendChild(store2(460,600,240,'D5','Graph / Neo4j DB',C.orange));
+  s.appendChild(store2(720,600,190,'D6','Alert DB',C.red));
+
+  // Flows: External → Processes
+  s.appendChild(fl(EE.emp.x+EE.emp.w,EE.emp.y+25,PP.p1.cx-PP.p1.rx,PP.p1.cy,'login events',C.cyan));
+  s.appendChild(fl(EE.emp.x+EE.emp.w,EE.emp.y+30,PP.p2.cx-PP.p2.rx,PP.p2.cy+10,'loan actions',C.green));
+  s.appendChild(fl(EE.emp.x+EE.emp.w,EE.emp.y+45,PP.p4.cx-PP.p4.rx,PP.p4.cy-10,'employee comms',C.purple));
+  s.appendChild(fl(EE.appl.x+EE.appl.w,EE.appl.y+25,PP.p2.cx-PP.p2.rx,PP.p2.cy+20,'application data',C.green));
+  s.appendChild(fl(EE.swift.x+EE.swift.w,EE.swift.y+25,PP.p3.cx-PP.p3.rx,PP.p3.cy+20,'SWIFT messages',C.amber));
+
+  // Flows: Data stores → Processes
+  s.appendChild(fl(480,354,PP.p5.cx-20,PP.p5.cy-PP.p5.ry,'behavior logs',C.cyan));
+  s.appendChild(fl(610,354,PP.p5.cx+20,PP.p5.cy-PP.p5.ry,'loan records',C.green));
+
+  // Process → Data stores
+  s.appendChild(fl(PP.p1.cx,PP.p1.cy+PP.p1.ry,340,330,'behavior logs',C.cyan));
+  s.appendChild(fl(PP.p2.cx,PP.p2.cy+PP.p2.ry,620,330,'loan records',C.green));
+  s.appendChild(fl(PP.p3.cx,PP.p3.cy+PP.p3.ry,875,330,'SWIFT/CBS records',C.amber));
+  s.appendChild(fl(PP.p4.cx,PP.p4.cy+PP.p4.ry,305,600,'comm logs',C.purple));
+  s.appendChild(fl(PP.p5.cx,PP.p5.cy+PP.p5.ry,580,600,'graph edges',C.orange));
+  s.appendChild(fl(PP.p6.cx,PP.p6.cy+PP.p6.ry,815,600,'alerts',C.red));
+
+  // Process → Risk Aggregator
+  s.appendChild(fl(PP.p1.cx+PP.p1.rx,PP.p1.cy,PP.p6.cx-PP.p6.rx,PP.p6.cy-15,'behavior risk',C.cyan));
+  s.appendChild(fl(PP.p2.cx+PP.p2.rx,PP.p2.cy,PP.p6.cx-PP.p6.rx,PP.p6.cy-5,'loan risk',C.green));
+  s.appendChild(fl(PP.p3.cx+PP.p3.rx,PP.p3.cy,PP.p6.cx-PP.p6.rx,PP.p6.cy+5,'compliance risk',C.amber));
+  s.appendChild(fl(PP.p4.cx+PP.p4.rx,PP.p4.cy,PP.p6.cx-PP.p6.rx,PP.p6.cy+5,'comms risk',C.purple));
+  s.appendChild(fl(PP.p5.cx+PP.p5.rx,PP.p5.cy,PP.p6.cx-PP.p6.rx,PP.p6.cy+15,'relation risk',C.orange));
+
+  // Risk aggregator → Auditor
+  s.appendChild(fl(PP.p6.cx+PP.p6.rx,PP.p6.cy,EE.audit.x,EE.audit.y+EE.audit.h,'risk report',C.red));
+  // CBS → Compliance
+  s.appendChild(fl(EE.cbs.x,EE.cbs.y+25,PP.p3.cx+PP.p3.rx,PP.p3.cy,'CBS response',C.amber));
+
+  document.getElementById('svg-dfd').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 4.5 — DFD Level 2 (Compliance Detail)
+// ──────────────────────────────────────────────────────────────
+function renderDFD2(){
+  const W=1000,H=600;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('BANKGUARD ENTERPRISE — DFD LEVEL 2 (COMPLIANCE DETAIL)',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('Yourdon-DeMarco Notation · Decomposition of P3 Compliance Engine',W/2,38,{fill:C.muted,size:9}));
+
+  function ext2(x,y,w,h,label){
+    const gg=el('g');
+    gg.appendChild(rect(x+3,y+3,w,h,{fill:'none',stroke:C.bord,sw:1,rx:4}));
+    gg.appendChild(rect(x,y,w,h,{fill:`${C.dim}60`,stroke:C.text,sw:1.4,rx:4}));
+    const lines=label.split('\n');
+    lines.forEach((l,i)=>gg.appendChild(txt(l,x+w/2,y+h/2-(lines.length-1)*7+i*14,{fill:C.text,size:9,weight:'700'})));
+    return gg;
+  }
+  function proc2(cx,cy,rx2,ry,pid,label,color){
+    const gg=el('g');
+    gg.appendChild(el('ellipse',{cx,cy,rx:rx2,ry,fill:`${color}10`,stroke:color,'stroke-width':'1.3','stroke-opacity':'.7'}));
+    gg.appendChild(txt(`P${pid}`,cx,cy-ry+18,{fill:color,size:8,weight:'700'}));
+    const lines=label.split('\n');
+    const startY=cy-(lines.length-1)*6;
+    lines.forEach((l,i)=>gg.appendChild(txt(l,cx,startY+i*13,{fill:color,size:9,weight:'700'})));
+    return gg;
+  }
+  function store2(x,y,w,sid,label,color){
+    const gg=el('g');
+    gg.appendChild(line(x,y,x+w,y,{stroke:color,sw:1.2}));
+    gg.appendChild(line(x,y+24,x+w,y+24,{stroke:color,sw:1.2}));
+    gg.appendChild(rect(x,y,28,24,{fill:`${color}18`,stroke:color,sw:1,rx:0}));
+    gg.appendChild(txt(sid,x+14,y+15.5,{fill:color,size:7.5,weight:'700'}));
+    gg.appendChild(txt(label,x+34,y+15.5,{anchor:'start',fill:C.text,size:8.5}));
+    return gg;
+  }
+  function fl(x1,y1,x2,y2,label,color=C.muted){
+    const gg=el('g');
+    const mx=(x1+x2)/2,my=(y1+y2)/2;
+    const len=Math.sqrt((x2-x1)**2+(y2-y1)**2);
+    const ux=(x2-x1)/len,uy=(y2-y1)/len;
+    const ex=x2-ux*8,ey=y2-uy*8;
+    gg.appendChild(el('line',{x1,y1,x2:ex,y2:ey,stroke:color,'stroke-width':'1.2'}));
+    const px=-uy*5,py=ux*5;
+    gg.appendChild(el('polygon',{
+      points:`${x2},${y2} ${ex+px},${ey+py} ${ex-px},${ey-py}`,fill:color}));
+    if(label){
+      gg.appendChild(rect(mx-label.length*2.3-2,my-9,label.length*4.6+6,12,{fill:C.bg,stroke:'none',rx:2}));
+      gg.appendChild(txt(label,mx,my+1,{fill:C.muted,size:7.5}));
+    }
+    return gg;
+  }
+
+  // External Entities (SWIFT, CBS, Risk Aggregator)
+  s.appendChild(ext2(50, 240, 110, 50, 'SWIFT Network'));
+  s.appendChild(ext2(840, 240, 110, 50, 'Core Banking\nSystem (CBS)'));
+  s.appendChild(ext2(440, 480, 120, 50, 'P6: Risk\nAggregator'));
+
+  // Sub-processes
+  s.appendChild(proc2(280, 265, 80, 40, '3.1', 'SWIFT Message\nIngester', C.amber));
+  s.appendChild(proc2(500, 265, 80, 40, '3.2', 'CBS Cross-\nReconciler', C.amber));
+  s.appendChild(proc2(720, 265, 80, 40, '3.3', 'Policy Rules\nEngine', C.amber));
+
+  // Data Store
+  s.appendChild(store2(400, 100, 200, 'D3', 'SWIFT / CBS DB', C.amber));
+
+  // Flows
+  // SWIFT -> Ingester
+  s.appendChild(fl(160, 265, 200, 265, 'MT799/MT760 stream', C.amber));
+  // Ingester -> DB
+  s.appendChild(fl(280, 225, 400, 120, 'raw SWIFT logs', C.amber));
+  // Reconciler <-> DB
+  s.appendChild(fl(450, 124, 470, 225, 'query', C.amber));
+  s.appendChild(fl(500, 225, 480, 124, 'SWIFT records', C.amber));
+  // Reconciler <-> CBS
+  s.appendChild(fl(580, 265, 840, 260, 'CBS check query', C.amber));
+  s.appendChild(fl(840, 280, 580, 280, 'CBS records', C.amber));
+  // Reconciler -> Rules Engine
+  s.appendChild(fl(580, 265, 640, 265, 'reconcile status', C.amber));
+  // Rules Engine -> Risk Aggregator
+  s.appendChild(fl(720, 305, 530, 480, 'compliance risk', C.amber));
+
+  document.getElementById('svg-dfd2').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 4.9 — UML Use Case Diagram
+// ──────────────────────────────────────────────────────────────
+function renderUseCase(){
+  const W=1000,H=650;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('BANKGUARD ENTERPRISE — UML USE CASE DIAGRAM',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('System Boundaries · Roles and Key Action Use Cases',W/2,38,{fill:C.muted,size:9}));
+
+  // Stick figure generator for actors
+  function actorFig(x,y,label,color){
+    const gg=el('g');
+    gg.appendChild(el('circle',{cx:x,cy:y-15,r:8,fill:'none',stroke:color,'stroke-width':1.5})); // Head
+    gg.appendChild(line(x,y-7,x,y+10,{stroke:color,sw:1.5})); // Spine
+    gg.appendChild(line(x-12,y-2,x+12,y-2,{stroke:color,sw:1.5})); // Arms
+    gg.appendChild(line(x,y+10,x-10,y+25,{stroke:color,sw:1.5})); // Left leg
+    gg.appendChild(line(x,y+10,x+10,y+25,{stroke:color,sw:1.5})); // Right leg
+    gg.appendChild(txt(label,x,y+38,{fill:color,size:8.5,weight:'700'}));
+    return gg;
+  }
+
+  function useCase(cx,cy,rx2,ry,label,color){
+    const gg=el('g');
+    gg.appendChild(el('ellipse',{cx,cy,rx:rx2,ry,fill:`${color}12`,stroke:color,'stroke-width':1.1}));
+    const lines=label.split('\n');
+    lines.forEach((l,i)=>gg.appendChild(txt(l,cx,cy-(lines.length-1)*6+i*13,{fill:color,size:8.5})));
+    return {el:gg,cx,cy,rx:rx2,ry};
+  }
+
+  // Draw System Boundary
+  s.appendChild(rect(200,80,600,530,{fill:`${C.bord}05`,stroke:C.bord,sw:1,rx:8}));
+  s.appendChild(txt('BANKGUARD RISK MANAGEMENT SYSTEM',W/2,102,{fill:`${C.muted}cc`,size:9.5,weight:'700',ls:'2'}));
+
+  // Actors
+  s.appendChild(actorFig(80, 200, 'Bank Employee', C.cyan));
+  s.appendChild(actorFig(80, 420, 'Branch Manager', C.green));
+  s.appendChild(actorFig(920, 310, 'Auditor / Regulator', C.purple));
+
+  // Use Cases
+  const UC={
+    uc1: useCase(340, 160, 95, 24, 'Log In & Action\nAudit Trail', C.cyan),
+    uc2: useCase(340, 250, 95, 24, 'Submit Loan Application\n& Applicant Details', C.green),
+    uc3: useCase(340, 360, 95, 24, 'Review Behavioral\nAnomaly Flags', C.cyan),
+    uc4: useCase(580, 200, 95, 24, 'Inspect SWIFT\nReconciliation Gaps', C.amber),
+    uc5: useCase(580, 310, 95, 24, 'Override Compliance\nHolds on Loans', C.green),
+    uc6: useCase(580, 420, 95, 24, 'View Live Risk & Alerts\nDashboard Panel', C.neon),
+    uc7: useCase(580, 530, 95, 24, 'Generate NLG Explanation\nfor Compliance Audit', C.purple),
+  };
+
+  Object.values(UC).forEach(u=>s.appendChild(u.el));
+
+  // Association lines (Actors to Use Cases)
+  // Employee -> UC1, UC2, UC3, UC6
+  s.appendChild(line(100, 190, UC.uc1.cx-UC.uc1.rx, UC.uc1.cy, {stroke:C.cyan, sw:.8}));
+  s.appendChild(line(100, 200, UC.uc2.cx-UC.uc2.rx, UC.uc2.cy, {stroke:C.green, sw:.8}));
+  s.appendChild(line(100, 210, UC.uc3.cx-UC.uc3.rx, UC.uc3.cy, {stroke:C.cyan, sw:.8}));
+  s.appendChild(line(100, 220, UC.uc6.cx-UC.uc6.rx, UC.uc6.cy-10, {stroke:C.cyan, sw:.8}));
+
+  // Manager -> UC2, UC5, UC6
+  s.appendChild(line(100, 410, UC.uc2.cx-UC.uc2.rx, UC.uc2.cy+10, {stroke:C.green, sw:.8}));
+  s.appendChild(line(100, 420, UC.uc5.cx-UC.uc5.rx, UC.uc5.cy, {stroke:C.green, sw:.8}));
+  s.appendChild(line(100, 430, UC.uc6.cx-UC.uc6.rx, UC.uc6.cy, {stroke:C.green, sw:.8}));
+
+  // Auditor -> UC4, UC6, UC7
+  s.appendChild(line(900, 300, UC.uc4.cx+UC.uc4.rx, UC.uc4.cy, {stroke:C.purple, sw:.8}));
+  s.appendChild(line(900, 310, UC.uc6.cx+UC.uc6.rx, UC.uc6.cy, {stroke:C.neon, sw:.8}));
+  s.appendChild(line(900, 320, UC.uc7.cx+UC.uc7.rx, UC.uc7.cy, {stroke:C.purple, sw:.8}));
+
+  // Include relations: UC5 <<include>> UC1
+  s.appendChild(line(UC.uc5.cx-20, UC.uc5.cy-24, UC.uc1.cx+20, UC.uc1.cy+24, {stroke:C.muted, sw:.7, dash:'3,3'}));
+  s.appendChild(txt('«include»', (UC.uc5.cx+UC.uc1.cx)/2 - 15, (UC.uc5.cy+UC.uc1.cy)/2, {fill:C.muted, size:7}));
+
+  document.getElementById('svg-usecase').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 5 — SEQUENCE DIAGRAM
+// ──────────────────────────────────────────────────────────────
+function renderSeq(){
+  const W=1080,H=860;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('SEQUENCE DIAGRAM — SWIFT/CBS FRAUD DETECTION',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('PNB/Nirav Modi scenario · ₹485 Cr LoU · Brady Branch · 23:47 IST · Real-time multi-module detection',W/2,38,{fill:C.muted,size:9}));
+
+  const actors=[
+    {id:'emp', label:['Employee','Terminal'],      color:C.cyan,    x:80},
+    {id:'swf', label:['SWIFT','Gateway'],           color:C.amber,   x:225},
+    {id:'cbs', label:['CBS','System'],              color:C.amber,   x:370},
+    {id:'comp',label:['Compliance','Engine'],       color:C.amber,   x:515},
+    {id:'ueba',label:['UEBA','Engine'],             color:C.cyan,    x:660},
+    {id:'risk',label:['Risk','Engine'],             color:C.red,     x:815},
+    {id:'dash',label:['Dashboard'],                color:C.neon,    x:980},
+  ];
+
+  const HEADH=90,LIFEY=90,BOXW=90,BOXH=40;
+  const msgs=[
+    {f:0,t:1,y:160,label:'Issue LoU MT799',         sub:'₹485 Cr · LOU-2024-HK-7821',color:C.cyan, type:'sync'},
+    {f:1,t:2,y:220,label:'Check CBS record',         sub:'Query: LOU-2024-HK-7821',   color:C.amber,type:'sync'},
+    {f:2,t:1,y:280,label:'NO RECORD FOUND',          sub:'SWIFT↔CBS gap detected',     color:C.red,  type:'ret'},
+    {f:1,t:3,y:330,label:'CBS Gap Alert',            sub:'+45 risk pts',               color:C.red,  type:'sync'},
+    {f:4,t:5,y:390,label:'UEBA Anomaly',             sub:'14.2σ from baseline +20 pts',color:C.cyan, type:'sync'},
+    {f:3,t:5,y:440,label:'Authority Breach',         sub:'48.5× limit +30 pts',        color:C.amber,type:'sync'},
+    {f:4,t:5,y:490,label:'Comms Flag',               sub:'Bribery intent 0.91 +10 pts',color:C.purple,type:'sync'},
+    {f:4,t:5,y:540,label:'Graph Link',               sub:'3-hop hidden link +15 pts',  color:C.orange,type:'sync'},
+    {f:5,t:5,y:590,label:'Cross-Signal Correlation', sub:'All 5 modules → same entity',color:C.neon,  type:'self'},
+    {f:5,t:6,y:640,label:'CRITICAL ALERT 100/100',   sub:'Freeze · Notify · SAR queue',color:C.red,  type:'sync'},
+    {f:6,t:0,y:700,label:'FREEZE LOU + REVOKE CREDS',sub:'Alert dispatched to auditor',color:C.red,  type:'ret'},
+    {f:6,t:6,y:750,label:'Audit Explanation Generated',sub:'SHAP + NLG Engine → Audit note',color:C.neon,type:'self'},
+  ];
+
+  // Actor boxes + lifelines
+  actors.forEach(a=>{
+    // head box
+    s.appendChild(rect(a.x-BOXW/2,LIFEY-BOXH,BOXW,BOXH,{fill:`${a.color}12`,stroke:a.color,sw:1,rx:4,extra:{'stroke-opacity':'.6'}}));
+    a.label.forEach((l,i)=>s.appendChild(txt(l,a.x,LIFEY-BOXH+12+i*14,{fill:a.color,size:9,weight:'700'})));
+    // lifeline
+    s.appendChild(line(a.x,LIFEY,a.x,H-30,{stroke:a.color,sw:.8,dash:'5,4',extra:{'stroke-opacity':'.3'}}));
+  });
+
+  // Messages
+  msgs.forEach(m=>{
+    const fx=actors[m.f].x, tx=actors[m.t].x;
+    const col=m.color;
+    if(m.type==='self'){
+      // Self-arrow (loop)
+      s.appendChild(el('path',{d:`M${fx},${m.y} Q${fx+50},${m.y} ${fx+50},${m.y+20} Q${fx+50},${m.y+35} ${fx},${m.y+35}`,
+        fill:'none',stroke:col,'stroke-width':'1.3'}));
+      s.appendChild(el('polygon',{points:`${fx},${m.y+35} ${fx+7},${m.y+30} ${fx+7},${m.y+40}`,fill:col}));
+    }else if(m.type==='ret'){
+      // Dashed return arrow (right to left)
+      const dir=tx>fx?1:-1;
+      s.appendChild(el('line',{x1:fx,y1:m.y,x2:tx+(dir<0?8:0),y2:m.y,stroke:col,'stroke-width':'1.3','stroke-dasharray':'6,3'}));
+      s.appendChild(el('polygon',{points:`${tx},${m.y} ${tx+(dir<0?8:-8)},${m.y-5} ${tx+(dir<0?8:-8)},${m.y+5}`,fill:col}));
+    }else{
+      // Solid arrow
+      const dir=tx>fx?-1:1;
+      s.appendChild(el('line',{x1:fx,y1:m.y,x2:tx+dir*8,y2:m.y,stroke:col,'stroke-width':'1.5'}));
+      s.appendChild(el('polygon',{points:`${tx},${m.y} ${tx+dir*8},${m.y-5} ${tx+dir*8},${m.y+5}`,fill:col}));
+    }
+    // label
+    const lx=Math.min(fx,tx)+(Math.abs(tx-fx)||50)/2;
+    const lw=(m.label.length+m.sub.length)*4.5+10;
+    s.appendChild(rect(lx-m.label.length*2.5-4,m.y-14,m.label.length*5+10,12,{fill:C.bg,stroke:'none',rx:2}));
+    s.appendChild(txt(m.label,lx,m.y-5,{fill:col,size:9,weight:'700'}));
+    s.appendChild(txt(m.sub,lx,m.y+11,{fill:C.muted,size:8}));
+  });
+
+  // Activation boxes (thin rects on lifelines during active periods)
+  [[3,165,700,C.cyan],[3,330,640,C.amber],[4,380,700,C.cyan],[5,330,680,C.red],[6,630,810,C.neon]].forEach(([ai,y1,y2,col])=>{
+    s.appendChild(rect(actors[ai].x-6,y1,12,y2-y1,{fill:`${col}25`,stroke:col,sw:.7,rx:2}));
+  });
+
+  document.getElementById('svg-seq').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 5 — COMPONENT ARCHITECTURE
+// ──────────────────────────────────────────────────────────────
+function renderComp(){
+  const W=1120,H=820;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('COMPONENT ARCHITECTURE DIAGRAM',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('React.js Frontend · FastAPI Backend · ML Analytics Layer · PostgreSQL · Neo4j · Redis · NLG Engine',W/2,38,{fill:C.muted,size:9}));
+
+  // Layer band
+  function layerBand(y,h,label,col){
+    s.appendChild(rect(20,y,W-40,h,{fill:`${col}05`,stroke:col,sw:.8,rx:8,extra:{'stroke-opacity':'.2'}}));
+    // Vertical layer label on left
+    const tg=el('text',{x:32,y:y+h/2+4,'text-anchor':'middle',fill:col,
+      'font-size':'9','font-weight':'700','font-family':MONO,'letter-spacing':'2',
+      transform:`rotate(-90, 32, ${y+h/2})`});
+    tg.textContent=label;
+    s.appendChild(tg);
+  }
+
+  // Component box
+  function comp(x,y,w,h,title,subs,color,stereotype='«component»'){
+    const gg=el('g');
+    gg.appendChild(rect(x,y,w,h,{fill:`${color}10`,stroke:color,sw:1,rx:5,extra:{'stroke-opacity':'.55'}}));
+    gg.appendChild(rect(x,y,w,20,{fill:`${color}20`,stroke:'none',rx:5}));
+    gg.appendChild(rect(x,y+15,w,5,{fill:`${color}20`,stroke:'none'}));
+    gg.appendChild(txt(stereotype,x+w/2,y+11,{fill:`${color}99`,size:7.5,extra:{'font-style':'italic'}}));
+    gg.appendChild(txt(title,x+w/2,y+32,{fill:color,size:9.5,weight:'700'}));
+    subs.forEach((sb,i)=>gg.appendChild(txt(sb,x+w/2,y+48+i*13,{fill:C.muted,size:8})));
+    return gg;
+  }
+
+  // Layer 1: Frontend
+  layerBand(56,175,'FRONTEND',C.cyan);
+  s.appendChild(comp(50,70,140,145,'Dashboard',['React 18 · Recharts','UI · RBAC views'],C.cyan));
+  s.appendChild(comp(205,70,130,145,'Alert Panel',['WebSocket','Live alerts','Risk badges'],C.cyan));
+  s.appendChild(comp(350,70,130,145,'Graph Viewer',['Neo4j D3 viz','Cluster view','Path highlight'],C.cyan));
+  s.appendChild(comp(495,70,130,145,'Loan Review',['Approval queue','SHAP charts','Audit log'],C.cyan));
+  s.appendChild(comp(640,70,130,145,'Auth / RBAC',['JWT tokens','Role gates','Session mgmt'],C.cyan));
+  s.appendChild(comp(785,70,155,145,'SWIFT/CBS\nMonitor',['Live reconcile','Gap alerts','LoU tracker'],C.neon,'«component»'));
+
+  // Layer 2: Backend
+  layerBand(250,190,'BACKEND',C.green);
+  s.appendChild(comp(50,265,130,160,'Auth Service',['JWT issue','Bcrypt hash','Role assign'],C.green));
+  s.appendChild(comp(195,265,130,160,'Alert Service',['Alert CRUD','Priority queue','SAR export'],C.green));
+  s.appendChild(comp(340,265,140,160,'ML Inference\nService',['Model calls','Score merge','Async jobs'],C.green));
+  s.appendChild(comp(495,265,140,160,'SWIFT/CBS\nReconciler',['SWIFT ingest','CBS lookup','Gap detect'],C.amber,'«service»'));
+  s.appendChild(comp(650,265,130,160,'WebSocket\nManager',['Push alerts','Room mgmt','Heartbeat'],C.green));
+  s.appendChild(comp(795,265,140,160,'Explanation\nService',['SHAP extract','NLG compile','NL audit note'],C.purple,'«service»'));
+  s.appendChild(comp(950,265,130,160,'Graph Query\nService',['Cypher queries','Path traverse','Cluster detect'],C.orange));
+
+  // Layer 3: ML
+  layerBand(465,180,'ML LAYER',C.purple);
+  s.appendChild(comp(50,480,160,150,'UEBA Model',['Isolation Forest','Peer group stats','Anomaly score'],C.cyan));
+  s.appendChild(comp(225,480,160,150,'Loan Model',['XGBoost + SHAP','Rule engine','Fraud probability'],C.green));
+  s.appendChild(comp(400,480,160,150,'NLP Model',['Sentence Transformer','NLG Engine','Entity extractor'],C.purple));
+  s.appendChild(comp(575,480,160,150,'Graph Model',['Neo4j + Louvain','Centrality calc','Path analysis'],C.orange));
+  s.appendChild(comp(750,480,160,150,'Meta Risk\nModel',['5-score aggregate','Correlation engine','0-100 score'],C.red));
+  s.appendChild(comp(925,480,155,150,'SWIFT/CBS\nReconciler ML',['Gap detection','Threshold rules','CBS matching'],C.amber));
+
+  // Layer 4: Data
+  layerBand(665,120,'DATA',C.muted);
+  s.appendChild(comp(50,680,200,90,'PostgreSQL',['Main app data','Loans · Alerts','Compliance'],C.green,'«database»'));
+  s.appendChild(comp(265,680,200,90,'Neo4j',['Graph store','Relationships','Louvain clusters'],C.orange,'«database»'));
+  s.appendChild(comp(480,680,200,90,'Redis',['Alert cache','WebSocket pub/sub','Session store'],C.red,'«database»'));
+  s.appendChild(comp(695,680,180,90,'NLG Service',['NLG explanation','Zero-shot intent','NL generation'],C.purple,'«external»'));
+  s.appendChild(comp(890,680,190,90,'SWIFT Network\n& CBS',['SWIFT feed','CBS query API','LoU records'],C.amber,'«external»'));
+
+  // Dependency arrows (vertical connections)
+  const depColor=C.bord;
+  // Frontend → Backend
+  [[120,215],[270,215],[415,215],[560,215],[705,215],[860,215]].forEach(([x,y])=>{
+    s.appendChild(arrow(x,y-2,x,250,depColor,.8));
+  });
+  // Backend → ML
+  [[120,425],[270,425],[410,425],[565,425],[715,425],[865,425]].forEach(([x,y])=>{
+    s.appendChild(arrow(x,y-2,x,465,depColor,.8));
+  });
+  // ML → Data
+  [[130,630],[305,630],[480,630],[655,630],[830,630]].forEach(([x,y])=>{
+    s.appendChild(arrow(x,y-2,x,665,depColor,.8));
+  });
+
+  document.getElementById('svg-comp').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 6 — DEPLOYMENT
+// ──────────────────────────────────────────────────────────────
+function renderDeploy(){
+  const W=1040,H=780;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('DEPLOYMENT ARCHITECTURE DIAGRAM',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('Docker containerized · Nginx reverse proxy · FastAPI workers · PostgreSQL + Neo4j + Redis · External APIs',W/2,38,{fill:C.muted,size:9}));
+
+  function node(x,y,w,h,label,color){
+    const gg=el('g');
+    // 3D depth
+    gg.appendChild(rect(x+8,y+8,w,h,{fill:C.bg,stroke:color,sw:.5,rx:6,extra:{'stroke-opacity':'.2'}}));
+    gg.appendChild(rect(x,y,w,h,{fill:`${color}08`,stroke:color,sw:1.2,rx:6,extra:{'stroke-opacity':'.5'}}));
+    gg.appendChild(rect(x,y,w,22,{fill:`${color}18`,stroke:'none',rx:6}));
+    gg.appendChild(rect(x,y+17,w,5,{fill:`${color}18`,stroke:'none'}));
+    gg.appendChild(txt('«node»',x+w/2,y+9,{fill:`${color}88`,size:7,extra:{'font-style':'italic'}}));
+    gg.appendChild(txt(label,x+w/2,y+18,{fill:color,size:9.5,weight:'700'}));
+    return gg;
+  }
+
+  function artifact(x,y,w,h,label,subs,color){
+    const gg=el('g');
+    // Artifact shape (rectangle with dog-ear)
+    const ear=10;
+    const p=`M${x},${y} L${x+w-ear},${y} L${x+w},${y+ear} L${x+w},${y+h} L${x},${y+h} Z`;
+    const ep=`M${x+w-ear},${y} L${x+w-ear},${y+ear} L${x+w},${y+ear}`;
+    gg.appendChild(el('path',{d:p,fill:`${color}10`,stroke:color,'stroke-width':'0.9','stroke-opacity':'.5'}));
+    gg.appendChild(el('path',{d:ep,fill:`${color}20`,stroke:color,'stroke-width':'0.9','stroke-opacity':'.5'}));
+    gg.appendChild(txt(label,x+w/2,y+18,{fill:color,size:9,weight:'700'}));
+    subs.forEach((sb,i)=>gg.appendChild(txt(sb,x+w/2,y+30+i*12,{fill:C.muted,size:7.5})));
+    return gg;
+  }
+
+  function connLine(x1,y1,x2,y2,label,color=C.bord){
+    const gg=el('g');
+    gg.appendChild(el('line',{x1,y1,x2,y2,stroke:color,'stroke-width':'1.5','stroke-dasharray':'7,3'}));
+    if(label){
+      const mx=(x1+x2)/2,my=(y1+y2)/2;
+      gg.appendChild(rect(mx-label.length*2.3-2,my-8,label.length*4.6+6,12,{fill:C.bg,stroke:'none',rx:2}));
+      gg.appendChild(txt(label,mx,my+2,{fill:C.muted,size:8}));
+    }
+    return gg;
+  }
+
+  // ── Layout ──
+  // Client
+  s.appendChild(node(30,60,180,60,'Client Browser',C.cyan));
+  s.appendChild(artifact(50,90,140,48,'React SPA',['Vite · React 18','RBAC Dashboard'],C.cyan));
+  s.appendChild(connLine(210,90,290,110,'HTTPS / WS',C.bord));
+
+  // Nginx
+  s.appendChild(node(290,60,130,60,'Nginx',C.green));
+  s.appendChild(artifact(298,88,114,48,'Reverse Proxy',['SSL termination','Load balance'],C.green));
+  s.appendChild(connLine(420,110,490,110,'proxy_pass',C.bord));
+
+  // Docker Cluster
+  s.appendChild(rect(480,50,460,260,{fill:`${C.purple}05`,stroke:C.purple,sw:1,rx:8,extra:{'stroke-opacity':'.3','stroke-dasharray':'8,4'}}));
+  s.appendChild(txt('DOCKER COMPOSE CLUSTER',710,66,{fill:`${C.purple}88`,size:8,weight:'700',ls:'2'}));
+
+  s.appendChild(node(498,80,200,100,'FastAPI App (×2)',C.green));
+  s.appendChild(artifact(510,108,90,65,'API Worker',['Auth · Alerts','SWIFT/CBS','WebSocket'],C.green));
+  s.appendChild(artifact(612,108,78,65,'ML Service',['UEBA · Loan','NLP · Graph','Meta Risk'],C.purple));
+
+  s.appendChild(node(714,80,210,100,'ML Worker',C.purple));
+  s.appendChild(artifact(720,108,190,65,'Celery Worker',['Async ML jobs','Model inference','SHAP calc'],C.purple));
+
+  s.appendChild(node(498,200,420,100,'Data Layer',C.amber));
+  s.appendChild(artifact(510,224,120,68,'PostgreSQL',['Main DB','Loans · Alerts','Compliance'],C.green));
+  s.appendChild(artifact(642,224,90,68,'Neo4j',['Graph DB','Relationships','Clusters'],C.orange));
+  s.appendChild(artifact(744,224,85,68,'Redis',['Alert cache','Pub/Sub','Sessions'],C.red));
+  s.appendChild(artifact(840,224,70,68,'TimescaleDB',['Behavior logs','UEBA time series'],C.cyan));
+
+  // External Services
+  s.appendChild(node(30,380,200,80,'External APIs',C.amber));
+  s.appendChild(artifact(40,408,85,52,'SWIFT Feed',['MT799/MT760','LoU messages'],C.amber));
+  s.appendChild(artifact(136,408,86,52,'CBS API',['Record lookup','Reconcile check'],C.amber));
+
+  s.appendChild(node(250,380,160,80,'NLG Engine API',C.purple));
+  s.appendChild(artifact(260,408,140,52,'NLG Service API',['NLG Engine','NL explanations'],C.purple));
+
+  s.appendChild(node(430,380,160,80,'Monitoring',C.muted));
+  s.appendChild(artifact(440,408,140,52,'Grafana + Loki',['Alert dashboards','Log aggregation'],C.muted));
+
+  s.appendChild(node(610,380,180,80,'CI/CD Pipeline',C.green));
+  s.appendChild(artifact(620,408,160,52,'GitHub Actions',['Auto tests','Docker build','Deploy'],C.green));
+
+  // Connection lines
+  s.appendChild(connLine(700,305,490,380,'SWIFT msgs',C.amber));
+  s.appendChild(connLine(700,305,330,380,'NLG queries',C.purple));
+  s.appendChild(connLine(700,305,520,380,'metrics',C.muted));
+  s.appendChild(connLine(700,305,700,380,'CI/CD',C.green));
+
+  // Internal connections in docker
+  s.appendChild(connLine(698,160,714,160,'queue',C.purple));
+  s.appendChild(connLine(600,180,600,200,'queries',C.green));
+  s.appendChild(connLine(820,180,820,200,'graph queries',C.orange));
+
+  // Legend
+  [[C.cyan,'Client/Frontend'],[C.green,'Backend/FastAPI'],[C.purple,'ML/NLG Engine'],[C.amber,'External/SWIFT'],[C.red,'Cache/Redis'],[C.muted,'Monitoring']].forEach(([col,lbl],i)=>{
+    s.appendChild(el('rect',{x:30+i*160,y:H-22,width:10,height:10,fill:`${col}30`,stroke:col,'stroke-width':'.8',rx:'2'}));
+    s.appendChild(txt(lbl,47+i*160,H-12,{anchor:'start',fill:C.muted,size:8}));
+  });
+
+  document.getElementById('svg-deploy').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// DIAGRAM 7 — ML PIPELINE
+// ──────────────────────────────────────────────────────────────
+function renderML(){
+  const W=1080,H=680;
+  const s=svgRoot(W,H);
+  s.appendChild(rect(0,0,W,H,{fill:C.bg,stroke:'none',rx:0}));
+  s.appendChild(txt('ANALYTICAL PIPELINE DIAGRAM',W/2,22,{fill:C.neon,size:12,weight:'700',ls:'2'}));
+  s.appendChild(txt('End-to-end processing pipeline · Ingestion → Feature Engineering → 5 Parallel Models → Meta Aggregation → Explainable Output',W/2,38,{fill:C.muted,size:9}));
+
+  function pbox(x,y,w,h,label,subs,color){
+    const gg=el('g');
+    gg.appendChild(rect(x,y,w,h,{fill:`${color}10`,stroke:color,sw:1.1,rx:6,extra:{'stroke-opacity':'.55'}}));
+    gg.appendChild(rect(x,y,w,3,{fill:color,stroke:'none',rx:3}));
+    gg.appendChild(txt(label,x+w/2,y+18,{fill:color,size:9.5,weight:'700'}));
+    subs.forEach((sb,i)=>gg.appendChild(txt(sb,x+w/2,y+34+i*13,{fill:C.muted,size:8.5})));
+    return gg;
+  }
+  function cyl(x,y,w,h,label,color){
+    const gg=el('g');
+    const ry=12,cx2=x+w/2;
+    gg.appendChild(el('ellipse',{cx:cx2,cy:y+ry,rx:w/2,ry,fill:`${color}15`,stroke:color,'stroke-width':'1','stroke-opacity':'.5'}));
+    gg.appendChild(rect(x,y+ry,w,h-ry,{fill:`${color}10`,stroke:color,sw:1,rx:0,extra:{'stroke-opacity':'.4'}}));
+    gg.appendChild(line(x,y+ry,x,y+h,{stroke:color,sw:.8}));
+    gg.appendChild(line(x+w,y+ry,x+w,y+h,{stroke:color,sw:.8}));
+    gg.appendChild(el('ellipse',{cx:cx2,cy:y+h,rx:w/2,ry,fill:`${color}10`,stroke:color,'stroke-width':'1','stroke-opacity':'.4'}));
+    gg.appendChild(el('ellipse',{cx:cx2,cy:y+ry,rx:w/2,ry,fill:`${color}18`,stroke:color,'stroke-width':'1','stroke-opacity':'.7'}));
+    gg.appendChild(txt(label,cx2,y+ry+6,{fill:color,size:8.5,weight:'700'}));
+    return gg;
+  }
+
+  // Stage 1: Ingestion
+  const S1Y=60;
+  s.appendChild(txt('① INGESTION',60,S1Y+10,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  s.appendChild(cyl(30,S1Y+16,120,70,'SWIFT\nMessages',C.amber));
+  s.appendChild(cyl(165,S1Y+16,120,70,'Employee\nLogs',C.cyan));
+  s.appendChild(cyl(300,S1Y+16,120,70,'Loan\nRecords',C.green));
+  s.appendChild(cyl(435,S1Y+16,120,70,'Comm\nData',C.purple));
+  s.appendChild(cyl(570,S1Y+16,120,70,'Relation\nData',C.orange));
+  s.appendChild(cyl(705,S1Y+16,120,70,'CBS\nRecords',C.amber));
+
+  // arrows to preprocessing
+  const S2Y=200;
+  [90,225,360,495,630,765].forEach(cx=>{
+    s.appendChild(arrow(cx,S1Y+86,cx,S2Y,C.bord));
+  });
+  // horizontal gather
+  s.appendChild(line(90,S2Y-10,765,S2Y-10,{stroke:C.bord,sw:.8,dash:'4,3'}));
+  s.appendChild(arrow(427,S2Y-10,427,S2Y+2,C.bord));
+
+  // Stage 2: Preprocessing
+  s.appendChild(txt('② PREPROCESSING',30,S2Y-22,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  s.appendChild(pbox(30,S2Y,980,68,'DATA PREPROCESSING & NORMALIZATION',
+    ['Null handling · Timestamp normalization · Label encoding · Feature scaling (StandardScaler) · Train/test split · Class balancing (SMOTE for fraud labels)'],C.muted));
+
+  // arrows to feature eng
+  const S3Y=S2Y+100;
+  s.appendChild(arrow(520,S2Y+68,520,S3Y,C.bord));
+
+  // Stage 3: Feature Engineering
+  s.appendChild(txt('③ FEATURE ENGINEERING',30,S3Y-14,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  const S3boxes=[
+    [30,S3Y,225,100,'Peer-Group Features','Baseline per role · Deviation sigma · Time-of-day dist.',C.cyan],
+    [265,S3Y,225,100,'Loan Features','Approval speed ratio · Manager avg delta · Applicant recurrence',C.green],
+    [500,S3Y,225,100,'Graph Features','Louvain cluster ID · Centrality score · Hop distance',C.orange],
+    [735,S3Y,225,100,'NLP Embeddings','Sentence vectors · Intent score · Entity tags',C.purple],
+  ];
+  S3boxes.forEach(([x,y,w,h,label,sub,col])=>s.appendChild(pbox(x,y,w,h,label,[sub],col)));
+
+  // arrows to models
+  const S4Y=S3Y+132;
+  // fan out from feature stage to 5 models
+  [142,377,612,847].forEach(cx=>s.appendChild(arrow(cx,S3Y+100,cx,S4Y+2,C.bord)));
+  // gather + fan to 5 model centers
+  s.appendChild(line(142,S4Y,847,S4Y,{stroke:C.bord,sw:.8,dash:'4,3'}));
+  const modelCX=[90,265,450,635,820];
+  modelCX.forEach(cx=>s.appendChild(arrow(cx,S4Y,cx,S4Y+16,C.bord)));
+
+  // Stage 4: Models (parallel)
+  s.appendChild(txt('④ PARALLEL MODEL INFERENCE',30,S4Y+6,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  const models=[
+    [30,S4Y+16,150,130,'UEBA\nIsolation Forest',['Peer baseline','14.2σ detection','Behavior score: 0-20'],C.cyan],
+    [195,S4Y+16,150,130,'Loan Intel\nXGBoost+SHAP',['Fraud probability','SHAP attribution','Loan score: 0-30'],C.green],
+    [380,S4Y+16,150,130,'Compliance\nJSON Rules + ML',['CBS reconcile','Policy checks','Score: 0-45'],C.amber],
+    [545,S4Y+16,150,130,'NLP\nSent.Transformer',['Bribery intent','Code-word detect','Comms score: 0-10'],C.purple],
+    [710,S4Y+16,150,130,'Graph\nNeo4j + Louvain',['Cluster detection','Path analysis','Graph score: 0-15'],C.orange],
+  ];
+  models.forEach(([x,y,w,h,label,subs,col])=>s.appendChild(pbox(x,y,w,h,label,subs,col)));
+
+  // gather to meta model
+  const S5Y=S4Y+178;
+  modelCX.forEach(cx=>s.appendChild(arrow(cx,S4Y+146,cx,S5Y-10,C.red)));
+  s.appendChild(line(modelCX[0],S5Y-10,modelCX[4],S5Y-10,{stroke:C.red,sw:1,dash:'5,3'}));
+  s.appendChild(arrow(modelCX[2],S5Y-10,modelCX[2],S5Y+2,C.red));
+
+  // Stage 5: Meta aggregation
+  s.appendChild(txt('⑤ META AGGREGATION',30,S5Y-18,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  s.appendChild(pbox(30,S5Y,980,68,'WEIGHTED META RISK ENGINE + CROSS-SIGNAL CORRELATOR',
+    ['Module scores → trained meta-model → correlation bonus (same entity targeted by 3+ modules) → Final Risk Score (0–100) → Threat Level: LOW / MEDIUM / HIGH / CRITICAL'],C.red));
+
+  // Stage 6: Output
+  const S6Y=S5Y+100;
+  s.appendChild(arrow(520,S5Y+68,520,S6Y,C.neon));
+  s.appendChild(txt('⑥ EXPLAINABLE OUTPUT',30,S6Y-14,{anchor:'start',fill:C.muted,size:8,weight:'700',ls:'2'}));
+  const outBoxes=[
+    [30,S6Y,220,68,'Risk Score + Level','0-100 · LOW/MED/HIGH/CRIT · Threat level badge',C.red],
+    [262,S6Y,220,68,'SHAP Waterfall','Per-module contribution · Ranked evidence · Audit log',C.amber],
+    [494,S6Y,220,68,'NLG Explanation','NLG Service → Natural language · Grounded in SHAP',C.purple],
+    [726,S6Y,220,68,'Recommended Action','Monitor · Hold Loan · Freeze · Notify · SAR queue',C.neon],
+  ];
+  outBoxes.forEach(([x,y,w,h,label,sub,col])=>s.appendChild(pbox(x,y,w,h,label,[sub],col)));
+
+  document.getElementById('svg-ml').appendChild(s);
+}
+
+// ──────────────────────────────────────────────────────────────
+// RENDER MAP & INIT
+// ──────────────────────────────────────────────────────────────
+const renderMap={
+  p1:renderArch, p2:renderERD, p3_0:renderDFD0, p3:renderDFD, p3_2:renderDFD2, p4:renderSeq,
+  p5:renderComp, p6:renderDeploy, p7:renderML, p8:renderUseCase,
+};
+
+// Initial render (Architecture is default active)
+renderArch();
+rendered['p1']=true;
+</script>
+</body>
+</html>
